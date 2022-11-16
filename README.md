@@ -13,3 +13,5 @@ Project AlbumSystem
 ## 任务分工
 
 待定
+
+## 功能设计
