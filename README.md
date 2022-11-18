@@ -15,3 +15,5 @@ Project AlbumSystem
 - 用户视角前端
 
 ## 功能设计
+
+![image-20221118130050912](https://cdn.jsdelivr.net/gh/Godzilla0209/BlogImage@main/img/202211181300049.png)
