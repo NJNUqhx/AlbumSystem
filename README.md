@@ -12,6 +12,6 @@ Project AlbumSystem
 
 ## 任务分工
 
-待定
+- 用户视角前端
 
 ## 功能设计
