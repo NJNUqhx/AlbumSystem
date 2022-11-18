@@ -18,8 +18,6 @@ Project AlbumSystem
 
 - 分别从用户视角和管理员视角来阐述系统预期实现的功能，主要包括相册存储管理、娱乐社交（用户）以及审核维护（管理员）功能。
 
-  ![image-20221118163636588](https://cdn.jsdelivr.net/gh/Godzilla0209/BlogImage@main/img/202211181636663.png
-
   ![image-20221118171354162](https://cdn.jsdelivr.net/gh/Godzilla0209/BlogImage@main/img/202211181713231.png)
 
 ## 功能设计
