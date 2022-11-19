@@ -16,10 +16,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private AdminMapper adminmapper;
 
     @Override
-    public UserDetails loadUserByUsername(String adminId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
 
         QueryWrapper<Admin> queryMapper = new QueryWrapper<>();
-        queryMapper.eq("admin_id", adminId);
+        queryMapper.eq("account", account);
         Admin admin = adminmapper.selectOne(queryMapper);
         if(admin == null){
             throw new RuntimeException("管理员账号不存在");

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Admin {
     @TableId(type = IdType.AUTO)
-    private Integer id;
-    private String adminId;
+    private Integer adminId;
+    private String account;
     private String password;
 }
