@@ -37,7 +37,7 @@ export default {
         let account = ref('');
         let password = ref('');
         let error_message = ref('');
-        login = () =>{
+        login = () => {
             error_message.value = '';
             store.dispatch("login",{
                 account: account.value,
@@ -48,7 +48,13 @@ export default {
                 error(){
                     error_message.value = "账号或密码错误";
                 }
-            })
+            });
+            return{
+                account,
+                password,
+                error_message,
+                login
+            }
         }
     }
 }
