@@ -1,6 +1,6 @@
 <template>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
+  <div class="container-fluid">
     <router-link class="navbar-brand" :to="{name: 'home'}">AlbumSystem</router-link>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -17,12 +17,12 @@
           <router-link :class="route_name == 'handlemoment' ? 'nav-link active' : 'nav-link'" :to="{name: 'handlemoment'}">处理动态</router-link>
         </li>
       </ul>
-      <ul class="navbar-nav">
+      <ul class="navbar-nav" style="margin-right:10%">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             QHX
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
             <li><a class="dropdown-item" href="#">登录</a></li>
             <li><a class="dropdown-item" href="#">注销</a></li>
           </ul>
