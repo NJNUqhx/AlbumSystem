@@ -24,6 +24,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
             <li><a class="dropdown-item" href="#">登录</a></li>
+            <li><a class="dropdown-item" href="#">注册</a></li>
             <li><a class="dropdown-item" href="#">注销</a></li>
           </ul>
         </li>

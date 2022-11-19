@@ -6,6 +6,8 @@ import ExaminePhoto from '../views/ExaminePhoto'
 import ExamineMoment from '../views/ExamineMoment'
 import HandleMoment from '../views/HandleMoment'
 import HandleComment from '../views/HandleComment'
+import LoginView from '../views/LoginView'
+import RegisterView from '../views/RegisterView'
 
 const routes = [
   {
@@ -37,6 +39,16 @@ const routes = [
     path: "/404/",
     name: "404",
     component: NotFound
+  },
+  {
+    path: "/admin/account/login/",
+    name: "login",
+    component: LoginView
+  },
+  {
+    path: "/admin/account/register/",
+    name: "register",
+    component: RegisterView
   },
   {
     path: "/:catchAll(.*)",
