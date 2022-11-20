@@ -17,7 +17,14 @@ export default {
         },
         updateToken(state, token) {
             state.token = token;
+        },
+        logout(state) {
+            state.adminId = "";
+            state.account = "";
+            state.token = "";
+            state.is_login = false;
         }
+
     },
 
     mutations: {
@@ -29,25 +36,50 @@ export default {
                 url: "http://127.0.0.1:3000/admin/account/token/",
                 type: "post",
                 data: {
-                    account: data.account,
-                    password: data.password
+                  username: data.account,
+                  password: data.password,
                 },
                 success(resp) {
-                    if (resp.error_message === "success"){
+                    if (resp.error_message === "success") {
                         context.commit("updateToken", resp.token);
                         data.success(resp);
-                    }else{
+                    } else {
                         data.error(resp);
                     }
-                        
                 },
                 error(resp) {
-                    console.log(resp);
+                  data.error(resp); 
                 }
-            });
+              });
+        },
+        getinfo(context, data) {
+            $.ajax({
+                url: "http://127.0.0.1:3000/admin/account/info/",
+                type: "get",
+                headers: {
+                    Authorization: "Bearer " + context.state.token,
+                },
+                success(resp) {
+                    if (resp.error_message === "success") {
+                        context.commit("updateAdmin", {
+                            ...resp,
+                            is_login: true,
+                        });
+                        data.success(resp);
+                    } else {
+                        data.error(resp);
+                    }
+                },
+                error(resp) {
+                    data.error(resp);
+                }
+            })
+        },
+        logout(context) {
+            context.commit("logout");
         }
-    },
 
+    },
     modules: {
 
     }

@@ -25,7 +25,7 @@
 import ContentField from '../components/ContentField'
 import {useStore} from 'vuex'
 import {ref} from 'vue'
-import {router} from '../router/index'
+import router from '../router/index'
 
 export default {
     name: "LoginView",
@@ -37,25 +37,31 @@ export default {
         let account = ref('');
         let password = ref('');
         let error_message = ref('');
-        login = () => {
-            error_message.value = '';
-            store.dispatch("login",{
-                account: account.value,
+        const login = () => {
+            error_message.value = "";
+            store.dispatch("login", {
+                username: account.value,
                 password: password.value,
-                success(){
-                    router.push({name: 'home'});
+                success() {
+                    store.dispatch("getinfo", {
+                        success() {
+                            router.push({ name: 'home' });
+                            console.log(store.state.user);
+                        }
+                    })
                 },
-                error(){
+                error() {
                     error_message.value = "账号或密码错误";
                 }
-            });
-            return{
-                account,
-                password,
-                error_message,
-                login
-            }
+            })
+        };
+        return{
+            account,
+            password,
+            error_message,
+            login
         }
+
     }
 }
 </script>
