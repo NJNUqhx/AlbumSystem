@@ -1,4 +1,5 @@
 import $ from 'jquery'
+
 export default {
     state: {
         adminId: "",
@@ -6,9 +7,9 @@ export default {
         token: "",
         is_login: false,
     },
-
-
     getters: {
+    },
+    mutations: {
         updateAdmin(state, admin) {
             state.adminId = admin.adminId;
             state.account = admin.account;
@@ -24,10 +25,6 @@ export default {
             state.token = "";
             state.is_login = false;
         }
-
-    },
-
-    mutations: {
     },
 
     actions: {
@@ -36,7 +33,7 @@ export default {
                 url: "http://127.0.0.1:3000/admin/account/token/",
                 type: "post",
                 data: {
-                  username: data.account,
+                  account: data.account,
                   password: data.password,
                 },
                 success(resp) {

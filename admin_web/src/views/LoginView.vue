@@ -7,9 +7,9 @@
                         <label for="account" class="form-label">账号</label>
                         <input v-model="account" type="text" class="form-control" id="account" placeholder="请输入账号">
                     </div>
-                    <div>
+                    <div class="mb-3">
                         <label for="password" class="form-label">密码</label>
-                        <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
+                        <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码" autocomplete="off">
                     </div>
                     <div class="error-message">
                         {{error_message}}
@@ -23,8 +23,8 @@
 
 <script>
 import ContentField from '../components/ContentField'
-import {useStore} from 'vuex'
-import {ref} from 'vue'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
 import router from '../router/index'
 
 export default {
@@ -40,13 +40,13 @@ export default {
         const login = () => {
             error_message.value = "";
             store.dispatch("login", {
-                username: account.value,
+                account: account.value,
                 password: password.value,
                 success() {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({ name: 'home' });
-                            console.log(store.state.user);
+                            console.log(store.state.admin);
                         }
                     })
                 },
@@ -59,7 +59,7 @@ export default {
             account,
             password,
             error_message,
-            login
+            login,
         }
 
     }
