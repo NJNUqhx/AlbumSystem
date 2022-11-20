@@ -20,4 +20,8 @@
 .container{
   margin-top: 20px;
 }
+
+.card {
+  background-color: rgba(255,255,255,0.3);
+}
 </style>

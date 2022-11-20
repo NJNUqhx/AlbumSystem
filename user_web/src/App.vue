@@ -35,7 +35,13 @@ nav a {
   color: #2c3e50;
 }
 
+/*color: #42b983;*/ 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: white;
+}
+
+body{
+  background-image: url("~@/assets/background.jpg");
+  background-size: cover;
 }
 </style>

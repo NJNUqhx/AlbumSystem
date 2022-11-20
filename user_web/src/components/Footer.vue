@@ -1,6 +1,6 @@
 <template>
     <div class="page-icon">
-        <span class="page-disabled"><i></i>上一页</span>
+        <span class="page-disabled">上一页</span>
         <span class="page-current">1</span>
         <a href="#">2</a>
         <a href="#">3</a>
@@ -8,7 +8,7 @@
         <a href="#">5</a>
         <a href="#">6</a>
         <a href="#">7</a>
-        <a class="page-next" href="#">下一页<i></i></a>
+        <a class="page-next" href="#">下一页</a>
     </div>
 </template>
   
@@ -28,6 +28,7 @@
 		margin:20px 0 0 0;      /*设置距离顶部20像素*/
 		font-size:0;            /*修复行内元素之间空隙间隔*/
 		text-align:center;      /*设置内容居中显示*/
+		font-weight: bold;
 	} 
 	
 	.page-icon a,.page-disabled,.page-next{
@@ -40,17 +41,17 @@
 	
 	.page-icon a{
 		text-decoration:none;
-		color:black;
+		color:white;
 	}
 	
 	.page-current{
-		color:#005aa0;
+		color:black;
 		padding:4px 12px 5px;
 		font-size:14px;     /*修复行内元素之间空隙间隔*/
 	}
 	
 	.page-disabled{
-		color:#ccc;
+		color:white;
 	}
 	
 	.page-next i,.page-disabled i{

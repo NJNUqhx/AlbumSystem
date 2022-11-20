@@ -9,7 +9,6 @@
                 <p class="card-text">简介...</p>
                 <a href="#" class="btn btn-primary" >Click to start</a>
             </div>
-        
         </div>
     </div>
 </template>
@@ -21,14 +20,17 @@
   </script>
   
   <style scoped>
-    .card-header{
-        margin-top: 30px 
-    }
-
     .btn-primary {
         margin-top: 20px;
         color: white;
         background-color: black;
-        
+    }
+    .card{
+        margin-top: 30px;
+        background-color: rgba(255,255,255,0.5);
+    }
+    .card-header {
+        color: black;
+        font-weight: bold;
     }
   </style>
