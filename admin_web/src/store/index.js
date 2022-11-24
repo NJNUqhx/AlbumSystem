@@ -9,6 +9,6 @@ export default createStore({
   actions: {
   },
   modules: {
-    Admin: ModuleAdmin,
+    admin: ModuleAdmin,
   }
 })

@@ -46,7 +46,7 @@ export default {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({ name: 'home' });
-                            console.log(store.state.admin);
+                            // console.log(store.state.admin);
                         }
                     })
                 },
