@@ -22,7 +22,7 @@
           </li>
         </ul>
         <ul class="navbar-nav" v-if="$store.state.admin.is_login">
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" style="margin-right: 80px;">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               {{ $store.state.admin.account }}
@@ -33,7 +33,7 @@
           </li>
         </ul>
         <ul class="navbar-nav" v-else>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" style="margin-right: 80px;">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               未登录
