@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class UserBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(UserBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(UserBackendApplication.class, args);
+    }
 
 }
