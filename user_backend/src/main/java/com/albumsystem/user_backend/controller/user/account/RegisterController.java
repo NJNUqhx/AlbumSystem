@@ -16,7 +16,6 @@ public class RegisterController {
 
     @PostMapping("/user/account/register/")
     public Map<String,String> register(@RequestParam Map<String,String> map){
-        // 密码 确认密码 昵称
         String nickname = map.get("nickname");
         String password = map.get("password");
         String confirmedPassword = map.get("confirmedPassword");

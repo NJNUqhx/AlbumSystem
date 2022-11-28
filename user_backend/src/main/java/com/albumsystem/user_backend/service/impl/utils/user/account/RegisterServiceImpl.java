@@ -66,12 +66,18 @@ public class RegisterServiceImpl implements RegisterService {
         }
 
         String encodedPassword = passwordEncoder.encode(password);
-        //String nickname = "ad";
         User user = new User(null, null, encodedPassword, nickname);
-        System.out.println(user);
         userMapper.insert(user);
-        System.out.println(user);
-        map.put("error_message", "success");// ***********
+
+        queryWrapper.clear();
+        queryWrapper.eq("nickname",nickname);
+        User updateUser = userMapper.selectOne(queryWrapper);
+        updateUser.setAccount();
+        userMapper.updateById(updateUser);
+        map.put("error_message", "success");
+        map.put("account",updateUser.getAccount());
+        map.put("nickname",updateUser.getNickname());
+        map.put("password","******");
         return map;
     }
 }

@@ -24,18 +24,12 @@ public class LoginServiceImpl implements LoginService {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(account, password);//自动存储加密后的密码
-//        System.out.println(account);
-//        System.out.println(password);
-        System.out.println(authenticationToken);
 
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);  // 登录失败，会自动处理
-        //这句话之后就不能输出了，是不是判定登录失败了。。。。
 
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticate.getPrincipal();
         User user = loginUser.getUser();
         String jwt = JwtUtil.createJWT(user.getUserId().toString());
-
-        System.out.println(user.getUserId());
 
         Map<String, String> map = new HashMap<>();
         map.put("error_message", "success");
@@ -43,9 +37,4 @@ public class LoginServiceImpl implements LoginService {
 
         return map;
     }
-
-//    @Override
-//    public Map<String, String> Login(String username, String password) {
-//        return null;
-//    }
 }

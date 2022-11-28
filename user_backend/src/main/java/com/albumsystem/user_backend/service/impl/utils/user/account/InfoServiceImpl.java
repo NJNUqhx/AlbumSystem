@@ -21,9 +21,9 @@ public class InfoServiceImpl implements InfoService {
 
         Map<String,String> map = new HashMap<>();
         map.put("error message","success");
-        map.put("id,",user.getUserId().toString());
+        map.put("userId,",user.getUserId().toString());
         map.put("account",user.getAccount());
-        map.put("password",user.getPassword());
+        map.put("nickname",user.getNickname());
         return map;
     }
 }

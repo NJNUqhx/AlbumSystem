@@ -21,9 +21,6 @@ public class LoginController {
         String account = map.get("account");
         String password = map.get("password");
 
-//        System.out.println(account);
-//        System.out.println(password);有
-
         return loginService.getToken(account,password);
     }
 

@@ -16,4 +16,8 @@ public class User {
     private String account;
     private String password;
     private String nickname;
+
+    public void setAccount() {
+        this.account = "njnu" + String.format("%05d",this.getUserId());
+    }
 }
