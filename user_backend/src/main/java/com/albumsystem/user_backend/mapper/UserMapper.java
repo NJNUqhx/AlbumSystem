@@ -1,7 +1,7 @@
 package com.albumsystem.user_backend.mapper;
 
-import com.albumsystem.user_backend.pojo.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.albumsystem.user_backend.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

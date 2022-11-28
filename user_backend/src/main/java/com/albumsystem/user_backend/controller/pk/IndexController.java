@@ -1,4 +1,4 @@
-package com.albumsystem.user_backend.controller;
+package com.albumsystem.user_backend.controller.pk;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

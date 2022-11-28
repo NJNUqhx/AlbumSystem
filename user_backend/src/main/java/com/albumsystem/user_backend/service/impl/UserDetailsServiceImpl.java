@@ -22,11 +22,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         queryWrapper.eq("account",account);//传输的username
         User user = userMapper.selectOne(queryWrapper);
         if (user == null){
-
-            throw new RuntimeException("用户不存在。。。");
+            throw new RuntimeException("用户不存在");
         }
-
-        System.out.println(user);
         return new UserDetailsImpl(user);
     }
 }
