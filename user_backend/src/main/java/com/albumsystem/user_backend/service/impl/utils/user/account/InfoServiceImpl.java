@@ -20,7 +20,7 @@ public class InfoServiceImpl implements InfoService {
         User user = loginUser.getUser();
 
         Map<String,String> map = new HashMap<>();
-        map.put("error_message","success");
+        map.put("error message","success");
         map.put("userId,",user.getUserId().toString());
         map.put("account",user.getAccount());
         map.put("nickname",user.getNickname());

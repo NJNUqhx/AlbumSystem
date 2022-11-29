@@ -1,94 +1,100 @@
 import $ from 'jquery';
-//import jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 
-export default  {
+const ModuleUser = {
     state: {
-        userId: "",
-        account: "",
-        nickname: "",
-        token: "",
+        id: "",
+        username: "",
+        photo: "",
+        followerCount: 0,
+        access: "",
+        refresh: "",
         is_login: false,
-        pulling_info: true,
     },
   
     //通过计算获取state中的数据
     getters: {
+
     },
     //对state修改值
     mutations: {
         updateUser(state, user) {
-            state.userId = user.userId;
-            state.account = user.account;
-            state.nickname = user.nickname;
+            state.id = user.id;
+            state.username = user.username;
+            state.photo = user.photo;
+            state.followerCount = user.followerCount;
+            state.access = user.access;
+            state.refresh = user.refresh;
             state.is_login = user.is_login;
         },
-        updateToken(state, token) {
-            state.token = token;
+        updateAccess(state, access) {
+            state.access = access;
         },
         logout(state) {
-            state.userId= "";
-            state.account = "";
-            state.nickname = "";
-            state.token = "";
+            state.id = "";
+            state.username = "";
+            state.photo = "";
+            state.followerCount = 0;
+            state.access = "";
+            state.refresh = "";
             state.is_login = false;
-        },
-        updatePullingInfo(state, pulling_info){
-            state.pulling_info = pulling_info;
-        },
+        }
     },
     //定义对state的操作/更新方式：更新用户名
     actions: {
         login(context, data) {
             $.ajax({
-                url: "http://127.0.0.1:3000/user/account/token/",
-                type: "post",
+                url: "https://app165.acapp.acwing.com.cn/api/token/",
+                type: "POST",
                 data: {
-                    account: data.account,
+                    username: data.username,
                     password: data.password,
                 },
                 success(resp) {
-                    if (resp.error_message === "success") {
-                        localStorage.setItem("jwt_token", resp.token);
-                        context.commit("updateToken", resp.token); 
-                        data.success(resp);        
-                    }else {
-                        data.error(resp);
-                    }
-                },
-                error(resp) {
-                  data.error(resp); 
-                }
-              });
-        },
-          getinfo(context, data) {
-            $.ajax({
-                url: "http://127.0.0.1:3000/user/account/info/",
-                type: "get",
-                headers: {
-                    Authorization: "Bearer " + context.state.token,
-                },
-                success(resp) {
-                    if (resp.error_message === "success") {
-                        context.commit("updateUser", {
-                            ...resp,
-                            is_login: true,
+                    const {access, refresh} = resp;
+                    const access_obj = jwt_decode(access);
+    
+                    setInterval(() => {
+                        $.ajax({
+                            url: "https://app165.acapp.acwing.com.cn/api/token/refresh/",
+                            type: "POST",
+                            data: {
+                                refresh,
+                            },
+                            success(resp) {
+                                context.commit('updateAccess', resp.access);
+                            }
                         });
-                        data.success(resp);
-                    } else {
-                        data.error(resp);
-                    }
+                    }, 4.5 * 60 * 1000);
+                    $.ajax({
+                        url: "https://app165.acapp.acwing.com.cn/myspace/getinfo/",
+                        type: "GET",
+                        data: {
+                            user_id: access_obj.user_id,
+                        },
+                        headers: {
+                            'Authorization': "Bearer " + access,
+                        },
+                        success(resp) {
+                            context.commit("updateUser", {
+                                ...resp,
+                                access: access,
+                                refresh: refresh,
+                                is_login: true,
+                            });
+                            data.success();
+                        },
+                    })
                 },
-                error(resp) {
-                    data.error(resp);
+                error() {
+                    data.error();
                 }
-            })
-        },
-        logout(context) {
-            localStorage.removeItem("jwt_token");
-            context.commit("logout");
-        }
+            });
+          },
     },
     //对state进行分割
     modules: {
     }
 }
+
+export default ModuleUser;

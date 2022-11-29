@@ -17,6 +17,11 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/login/',
+    name: 'login',
+    component: LoginView
+  },
+  {
     path: '/404/',
     name: '404',
     component: NotFoundView
@@ -27,17 +32,12 @@ const routes = [
     component: UserListView
   },
   {
-    path: '/userprofile/:userid',
+    path: '/userprofile/:userId',
     name: 'userprofile',
     component: UserProfileView
   },
   {
-    path: '/user/account/login/',
-    name: 'login',
-    component: LoginView
-  },
-  {
-    path: '/user/account/register/',
+    path: '/register/',
     name: 'register',
     component: RegisterView
   },

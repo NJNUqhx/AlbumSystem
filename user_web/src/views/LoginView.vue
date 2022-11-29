@@ -4,8 +4,8 @@
             <div class="col-3">
                 <form @submit.prevent="login">
                     <div class="mb-3">
-                        <label for="account" class="form-label">用户名</label>
-                        <input v-model="account" type="text" class="form-control" id="userid">
+                        <label for="userid" class="form-label">用户名</label>
+                        <input v-model="username" type="text" class="form-control" id="userid">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">密码</label>
@@ -34,51 +34,26 @@ export default {
 
     setup() {
         const store = useStore();
-        let account = ref('');
+        let username = ref('');
         let password = ref('');
         let error_message = ref('');
-
-        const jwt_token = localStorage.getItem("jwt_token");
-        if(jwt_token){
-            store.commit("updateToken", jwt_token);
-            store.dispatch("getinfo",{
-                success(){
-                    router.put({name: "home"});
-                    store.commit("updatePullingInfo", false);
-                },
-                error(){
-                    store.commit("updatePullingInfo", false);
-                }
-            })
-        }else{
-            store.commit("updatePullingInfo", false);
-        }
-
+   
         const login = () => {
             error_message.value = "";
             store.dispatch("login", {
-                account: account.value,
+                username: username.value,
                 password: password.value,
                 success() {
-                    console.log(account);
-                    store.dispatch("getinfo", {
-                        success() {
-                            router.push({ name: 'home' });
-                            // console.log(store.state.admin);
-                        },
-                        error(){
-                            console.log("获取用户信息失败");
-                        }
-                    })
+                router.push({name: 'userlist'});
                 },
                 error() {
-                    error_message.value = "账号或密码错误";
+                error_message.value = "用户名或密码错误";
                 }
-            })
+            });
         };
 
         return {
-            account,
+            username,
             password,
             error_message,
             login,
