@@ -4,6 +4,7 @@ export default {
     state: {
         adminId: "",
         account: "",
+        nickname:"",
         token: "",
         is_login: false,
         pulling_info: true,

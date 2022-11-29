@@ -16,14 +16,16 @@ export default {
   },
   setup() {
     $.ajax({
-      url: "http://127.0.0.1:3000/user/account/register/",
+      url: "http://127.0.0.1:4000/user/account/token/",
       type: "post",
       data: {
         password: "njnu",
-        confirmedPassword: "njnu",
-        nickname: "njnuxzl"
+        account: "njnu00001"
       },
       success(resp){
+        console.log(resp);
+      },
+      error(resp){
         console.log(resp);
       }
     });

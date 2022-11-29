@@ -7,12 +7,60 @@
   import 'bootstrap/dist/css/bootstrap.css';
   import 'bootstrap/dist/js/bootstrap';
   import NavBar from './components/NavBar';
+  //import $ from 'jquery'
 
   export default {
     name: "APP",
     components: {
         NavBar
-    }
+    },
+/*
+    setup(){
+      $.ajax({
+        url: "http://127.0.0.1:3000/user/account/token/",
+        type: "post",
+        data: {
+          account: 'njnu00001',
+          password: 'njnu',
+        },
+        success(resp){
+          console.log(resp);
+        },
+        error(resp){
+          console.log(resp);
+        }
+      });
+
+      $.ajax({
+        url: "http://127.0.0.1:3000/user/account/info/",
+        type: "get",
+        headers: {
+          Authorization: "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIzZWFhOWFhOTAyMTg0MmVjYTBjZDcxMDBjYzY4MjE4NyIsInN1YiI6IjEiLCJpc3MiOiJzZyIsImlhdCI6MTY2OTcxMTc2NiwiZXhwIjoxNjcwOTIxMzY2fQ.xjX6saMlP-YtywGC0cfRqVQdHM-SpwbhmtI8x8Ewpas",
+        },
+        success(resp){
+          console.log(resp);
+        },
+        error(resp){
+          console.log(resp);
+        }
+      });
+
+      $.ajax({
+        url: "http://127.0.0.1:3000/user/account/register/",
+        type: "post",
+        data: {
+          password: "njnu",
+          confirmedPassword: "njnu",
+          nickname: "njnuxzl"
+        },
+        success(resp){
+          console.log(resp);
+        },
+        error(resp){
+          console.log(resp);
+        }
+      });
+    }*/
   }
 
 </script>
