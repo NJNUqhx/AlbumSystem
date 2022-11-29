@@ -14,7 +14,7 @@
                     <td>
                         <div class="card">
                             <div class="card-body">
-                                <img :src="photo.address" class="img-fluid img-thumbnail" alt="待审核照片">
+                                <img :src="require('D:/GitHub/AlbumSystem/images/2/5.jpg')" class="img-fluid img-thumbnail" alt="待审核照片">
                             </div>
                         </div>
                     </td>
