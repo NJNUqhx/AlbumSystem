@@ -14,15 +14,17 @@
                     <td>
                         <div class="card">
                             <div class="card-body">
-                                <img :src="require('D:/GitHub/AlbumSystem/images/2/5.jpg')" class="img-fluid img-thumbnail" alt="待审核照片">
+                                <img :src="require('D:/GitHub/AlbumSystem/images/'+ photo.userId + '/' + photo.photoId + '.jpg')" class="img-fluid img-thumbnail" alt="待审核照片">
                             </div>
                         </div>
                     </td>
                     <td>
                         <ul class="list-group">
-                            <li class="list-group-item">所属用户: {{ photo.userId }}</li>
+                            <li class="list-group-item">用户编号: {{ photo.userId }}</li>
                             <li class="list-group-item">照片编号: {{ photo.photoId }}</li>
                             <li class="list-group-item">上传时间: {{ photo.time }}</li>
+                            <li class="list-group-item">访问权限: {{ photo.authority }}</li>
+                            <li class="list-group-item">审核状态: {{ photo.status }}</li>
                         </ul>
                     </td>
                     <td>
@@ -44,35 +46,35 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { ref } from 'vue'
+import $ from 'jquery'
 
 export default {
     name: "ExaminePhoto",
     components: {
     },
     setup() {
-        const photos = reactive([
-            {
-                address: "http://ceai.njnu.edu.cn/UploadFiles/2022-04/2/2022042012064779273.png",
-                userId: "njnuqhx",
-                photoId: 1,
-                time: "20221117"
-            },
-            {
-                address: "http://ceai.njnu.edu.cn/UploadFiles/2021-12/2/2021121911222992737.jpg",
-                userId: "njnuxzl",
-                photoId: 2,
-                time: "20221118"
-            },
-            {
-                address: "http://ceai.njnu.edu.cn/UploadFiles/2020-12/13/2020122515095885244.jpg",
-                userId: "njnucsq",
-                photoId: 3,
-                time: "20221119"
-            }
-        ]);
+        let photos = ref([]);
+        const jwt_token = localStorage.getItem("jwt_token");
+        const getPhotoListAll = () => {
+            $.ajax({
+                url: "http://127.0.0.1:3000/admin/photo/list/all/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                success(resp){
+                    photos.value = resp;
+                },
+                error(){
+                    console.log("error");
+                }
+            })
+        }
+        getPhotoListAll();
         return {
-            photos
+            photos,
+            getPhotoListAll
         }
     }
 

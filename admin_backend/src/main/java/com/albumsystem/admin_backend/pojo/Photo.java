@@ -8,26 +8,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class Photo {
     @TableId(type = IdType.AUTO)
-    private Integer commentId;
+    private Integer photoId;
     private Integer userId;
-    private String content;
-    private Integer status;
+    private String name;
+    private Integer authority;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date time;
-
-    @Override
-    public String toString() {
-        return
-                "commentId=" + commentId +
-                "\n, userId=" + userId +
-                "\n, content='" + content + '\'' +
-                "\n, status=" + status +
-                "\n, time=" + time +
-                '\n';
-    }
+    private Integer status;
+    private String address;
 }

@@ -1,4 +1,4 @@
-package com.albumsystem.admin_backend.controller.Admin;
+package com.albumsystem.admin_backend.controller.admin;
 
 import com.albumsystem.admin_backend.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
