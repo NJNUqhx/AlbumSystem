@@ -4,7 +4,7 @@
             <div class="col-3">
                 <form @submit.prevent="register">
                     <div class="mb-3">
-                        <label for="nickname" class="form-label">用户名</label>
+                        <label for="nickname" class="form-label">账号</label>
                         <input v-model="nickname" type="text" class="form-control" id="userid">
                     </div>
                     <div class="mb-3">

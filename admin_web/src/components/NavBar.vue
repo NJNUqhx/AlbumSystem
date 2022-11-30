@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
+    <div class="container">
       <router-link class="navbar-brand" :to="{ name: 'home' }">AlbumSystem</router-link>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -22,7 +22,7 @@
           </li>
         </ul>
         <ul class="navbar-nav" v-if="$store.state.admin.is_login">
-          <li class="nav-item dropdown" style="margin-right: 80px;">
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               {{ $store.state.admin.account }}
@@ -33,7 +33,7 @@
           </li>
         </ul>
         <ul class="navbar-nav" v-else>
-          <li class="nav-item dropdown" style="margin-right: 80px;">
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               未登录

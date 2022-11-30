@@ -82,11 +82,11 @@ export default {
 </script>
 
 <style scoped>
-.container {
+/* .container {
     margin-top: 10px;
     margin-left: 10px;
     margin-right: 10px;
-}
+} */
 .table{
     text-align: center;
 }

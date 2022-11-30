@@ -43,8 +43,8 @@ export default {
             store.commit("updateToken", jwt_token);
             store.dispatch("getinfo",{
                 success(){
-                    router.put({name: "home"});
                     store.commit("updatePullingInfo", false);
+                    router.push({ name: 'home' });
                 },
                 error(){
                     store.commit("updatePullingInfo", false);
@@ -63,7 +63,6 @@ export default {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({ name: 'home' });
-                            // console.log(store.state.admin);
                         }
                     })
                 },
