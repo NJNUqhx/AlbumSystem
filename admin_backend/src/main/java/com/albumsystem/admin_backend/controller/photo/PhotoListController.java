@@ -17,7 +17,6 @@ public class PhotoListController {
 
     @PostMapping("/admin/photo/list/all/")
     public List<Photo> photoListAll(){
-        System.out.println(photoListService.photoList());
         return photoListService.photoList();
     }
 

@@ -4,9 +4,8 @@
             <thead>
                 <tr>
                     <th style="width: 40%;"><span>待审核照片</span></th>
-                    <th style="width: 25%"><span>照片信息</span></th>
-                    <th style="width: 25%"><span>审核意见</span></th>
-                    <th style="width: 10%"><span>审核操作</span></th>
+                    <th style="width: 40%"><span>照片信息</span></th>
+                    <th style="width: 20%"><span>审核操作</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -20,22 +19,25 @@
                     </td>
                     <td>
                         <ul class="list-group">
-                            <li class="list-group-item">用户编号: {{ photo.userId }}</li>
-                            <li class="list-group-item">照片编号: {{ photo.photoId }}</li>
-                            <li class="list-group-item">上传时间: {{ photo.time }}</li>
-                            <li class="list-group-item">访问权限: {{ photo.authority }}</li>
-                            <li class="list-group-item">审核状态: {{ photo.status }}</li>
+                            <li class="list-group-item"><b>用户编号:</b> {{ photo.userId }}</li>
+                            <li class="list-group-item"><b>照片编号:</b> {{ photo.photoId }}</li>
+                            <li class="list-group-item"><b>照片名称:</b> {{ photo.name }}</li>
+                            <li class="list-group-item"><b>上传时间:</b> {{ photo.time }}</li>
+                            <li class="list-group-item"><b>访问权限:</b> {{ showAuthority(photo.authority) }}</li>
+                            <li class="list-group-item"><b>审核状态:</b> {{ showStatus(photo.status) }}</li>
+                            <li class="list-group-item"><b>存储地址:</b> {{ photo.address }}</li>
                         </ul>
                     </td>
                     <td>
                         <div class="input-group">
-                            <textarea class="form-control" placeholder="审核意见" style="height: 100px;"></textarea>
+                            <textarea class="form-control" :id= "'advice' + photo.photoId" placeholder="审核意见" style="height: 100px;"></textarea>
                         </div>
-                    </td>
-                    <td>
-                        <div class="btn-group-vertical">
-                            <button class="btn btn-success" style="margin-top: 10%">通过</button>
-                            <button class="btn btn-danger">拒绝</button>
+                        <div class="btn-group">
+                            <button class="btn btn-success" @click="photoExamine(photo, 1)">通过</button>
+                            <button class="btn btn-danger"  @click="photoExamine(photo, 2)">拒绝</button>
+                        </div>
+                        <div class="error-message">
+                            {{ error_message }}
                         </div>
                     </td>
                 </tr>
@@ -55,6 +57,9 @@ export default {
     },
     setup() {
         let photos = ref([]);
+        let error_message = ref('');
+        let advice = ref('');
+        let target = ref('');
         const jwt_token = localStorage.getItem("jwt_token");
         const getPhotoListAll = () => {
             $.ajax({
@@ -71,10 +76,66 @@ export default {
                 }
             })
         }
+        const showStatus = (status) =>{
+            if(status === 0)
+                return "待审核";
+            else if(status === 1)
+                return "审核通过";
+            else if(status === 2)
+                return "审核失败";
+            else
+                return "状态出错";
+        }
+        const showAuthority = (authority) =>{
+            if(authority === 0)
+                return "所有人可见";
+            else if(authority === 1)
+                return "仅好友可见";
+            else if(authority === 2)
+                return "仅自己可见";
+            else 
+                return "状态出错";
+        }
+        const photoExamine = (photo, examination) =>{
+            error_message.value = "";
+            target = "#advice" + photo.photoId;
+            advice = $(target).val();
+            $.ajax({
+                url: "http://127.0.0.1:3000/admin/photo/examine/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                data:{
+                    photoId: photo.photoId,
+                    userId: photo.userId,
+                    advice: advice,
+                    examine: examination
+                },
+                success(resp){
+                    if(resp.error_message === "success")
+                    {
+                        error_message.value = "";
+                    }else
+                    {
+                        error_message.value = resp.error_message;
+                    }
+                },
+                error(){
+                    error_message.value = "bug";
+                }
+            })
+            $(target).val("");
+            getPhotoListAll();
+        }
         getPhotoListAll();
         return {
             photos,
-            getPhotoListAll
+            getPhotoListAll,
+            showStatus,
+            showAuthority,
+            error_message,
+            photoExamine
         }
     }
 
@@ -91,5 +152,12 @@ export default {
 } */
 .table{
     text-align: center;
+}
+button{
+    margin-top: 10px;
+    width:100%;
+}
+div.error-message{
+    color: red;
 }
 </style>
