@@ -45,4 +45,31 @@ public class CommentReportListController {
         return list;
     }
 
+    @PostMapping("/admin/comment/map/list")
+    public List<Map<String,String>> commentMapList(){
+        List<Integer> id = commentReportListService.commentReportListId();
+        List<Comment> commentContentList = commentReportListService.commentContentList(id);
+        List<CommentReport> commentReportList = commentReportListService.commentReportList(id);
+        List<Map<String, String>> list = new ArrayList<>();
+        if(commentContentList.size() != commentReportList.size()) return null;
+        for(int i = 0; i < commentContentList.size(); i++)
+        {
+           Map<String, String> map = new HashMap<>();
+           Comment comment = commentContentList.get(i);
+           CommentReport commentReport = commentReportList.get(i);
+           map.put("commentId", comment.getCommentId().toString());
+           map.put("userId", comment.getUserId().toString());
+           map.put("content", comment.getContent());
+           map.put("comment_time", comment.getTime().toString());
+           map.put("comment_status", comment.getStatus().toString());
+
+           map.put("reportId", commentReport.getReportId().toString());
+           map.put("reason", commentReport.getReason());
+           map.put("report_status", commentReport.getStatus().toString());
+           map.put("report_time", commentReport.getTime().toString());
+           list.add(map);
+        }
+        return list;
+    }
+
 }

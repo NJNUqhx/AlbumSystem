@@ -9,29 +9,37 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="commentContent in commentContentList" :key="commentContent.id">
+                <tr v-for="comment in commentList" :key="comment.id">
                     <td>
+                        <!-- <p>{{comment["report_time"]}}</p> -->
                         <ul class="list-group">
-                            <li class="list-group-item"><b>评论编号:</b>{{commentContent.commentId}}</li>
-                            <li class="list-group-item"><b>用户编号:</b>{{commentContent.userId}}</li>
-                            <li class="list-group-item"><b>评论内容:</b>{{commentContent.content}}</li>
-                            <li class="list-group-item"><b>评论时间:</b>{{commentContent.time}}</li>
+                            <li class="list-group-item"><b>评论编号:</b>{{ comment["commentId"] }}</li>
+                            <li class="list-group-item"><b>用户编号:</b>{{ comment["userId"] }}</li>
+                            <li class="list-group-item"><b>评论内容:</b>{{ comment["content"] }}</li>
+                            <li class="list-group-item"><b>评论时间:</b>{{ comment["comment_time"] }}</li>
+                            <li class="list-group-item"><b>评论状态:</b> {{ show_comment_status(comment["comment_status"]) }}</li>
                         </ul>
                     </td>
                     <td>
                         <ul class="list-group">
-                            <li class="list-group-item">被举报用户: </li>
-                            <li class="list-group-item">评论编号: </li>
-                            <li class="list-group-item">举报时间: </li>
+                            <li class="list-group-item"><b>举报编号:</b> {{ comment["reportId"] }}</li>
+                            <li class="list-group-item"><b>评论编号:</b> {{ comment["commentId"] }}</li>
+                            <li class="list-group-item"><b>被举报用户编号:</b> {{ comment["userId"] }}</li>
+                            <li class="list-group-item"><b>举报理由:</b> {{ comment["reason"] }}</li>
+                            <li class="list-group-item"><b>举报时间:</b> {{ comment["report_time"] }}</li>
+                            <li class="list-group-item"><b>处理状态:</b> {{ show_report_status(comment["report_status"]) }}</li>
                         </ul>
                     </td>
                     <td>
                         <div class="input-group">
-                            <textarea class="form-control" placeholder="处理意见" style="height: 100px;"></textarea>
+                            <textarea class="form-control" :id="'advice' + comment['reportId']" placeholder="处理意见" style="height: 100px;"></textarea>
                         </div>
                         <div class="btn-group-vertical">
-                            <button class="btn btn-success">删除评论</button>
-                            <button class="btn btn-danger">保留评论</button>
+                            <button class="btn btn-success" @click="commentHandle(comment, 1)">举报成功</button>
+                            <button class="btn btn-danger"  @click="commentHandle(comment, 2)">举报失败</button>
+                        </div>
+                        <div class="error-message" :id="'error-message' + comment['reportId']">
+                            {{ error_message }}
                         </div>
                     </td>
                 </tr>
@@ -41,53 +49,136 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import $ from 'jquery'
 
 export default {
     name: "HandleComment",
     components: {
     },
-    setup(){
+    setup() {
         const jwt_token = localStorage.getItem("jwt_token");
-        let commentContentList = ref([]);
-        let commentReportList = ref([]);
-        const getCommentContentList = () => {
+        // let commentBothList = ref([]);
+        // let commentReportList = ref([]);
+        // let commentContentList = ref([]);
+        let commentList = ref([]);
+        let error_message = ref("");
+        let advice = ref("");
+        let target = ref("");
+        // const getCommentContentList = () => {
+        //     $.ajax({
+        //         url: "http://127.0.0.1:3000/admin/comment/content/list/",
+        //         type: "post",
+        //         headers: {
+        //             Authorization: "Bearer " + jwt_token,
+        //         },
+        //         success(resp){
+        //             commentContentList.value = resp;
+        //             console.log(commentContentList.value);
+        //         },
+        //         error(){
+        //             console.log("error");
+        //         }
+        //     })
+        // }
+        // const getCommentReportList = () => {
+        //     $.ajax({
+        //         url: "http://127.0.0.1:3000/admin/comment/report/list/",
+        //         type: "post",
+        //         headers: {
+        //             Authorization: "Bearer " + jwt_token,
+        //         },
+        //         success(resp){
+        //             commentReportList.value = resp;
+        //         },
+        //         error(){
+        //             console.log("error");
+        //         }
+        //     })
+        // }
+        // const getCommentBothList = () => {
+        //     $.ajax({
+        //         url: "http://127.0.0.1:3000/admin/comment/both/list/",
+        //         type: "post",
+        //         headers: {
+        //             Authorization: "Bearer " + jwt_token,
+        //         },
+        //         success(resp){
+        //             commentBothList.value = resp;
+        //         },
+        //         error(){
+        //             console.log("error");
+        //         }
+        //     })
+        // }
+        const getCommentList = () => {
             $.ajax({
-                url: "http://127.0.0.1:3000/admin/comment/content/list/",
+                url: "http://127.0.0.1:3000/admin/comment/map/list",
                 type: "post",
                 headers: {
                     Authorization: "Bearer " + jwt_token,
                 },
-                success(resp){
-                    commentContentList.value = resp;
+                success(resp) {
+                    commentList.value = resp;
+
                 },
-                error(){
+                error() {
                     console.log("error");
                 }
             })
         }
-        const getCommentReportList = () =>{
+        const show_comment_status = (status) =>{
+            if(status === "0")
+                return "默认状态";
+            else if(status === "1")
+                return "举报成功->删除";
+            else
+                return "举报失败->保留";
+        }
+        const show_report_status = (status) =>{
+            if(status === "0")
+                return "待处理";
+            else if(status === "1")
+                return "举报成功";
+            else
+                return "举报失败";
+        }
+
+        const commentHandle = (comment,handle) =>{
+            error_message = "";
+            target = "#advice" + comment["reportId"];
+            advice = $(target).val();
             $.ajax({
-                url: "http://127.0.0.1:3000/admin/comment/report/list/",
+                url: "http://127.0.0.1:3000/admin/comment/handle/",
                 type: "post",
                 headers: {
                     Authorization: "Bearer " + jwt_token,
                 },
-                success(resp){
-                    commentReportList.value = resp;
+                data:{
+                    reportId: comment["reportId"],
+                    userId: comment["userId"],
+                    handle: handle,
+                    advice: advice
                 },
-                error(){
+                success(resp) {
+                    if(resp.error_message !== "success")
+                        error_message.value = resp.error_message;
+                },
+                error() {
                     console.log("error");
                 }
             })
+            getCommentList();
         }
-        getCommentContentList();
-        return{
-            commentContentList,
-            commentReportList,
-            getCommentContentList,
-            getCommentReportList
+
+        getCommentList();
+        return {
+            commentList,
+            getCommentList,
+            show_comment_status,
+            show_report_status,
+            commentHandle,
+            error_message
         }
     }
 }
@@ -99,7 +190,15 @@ export default {
     margin-left: 10px;
     margin-right: 10px;
 } */
-.table{
+.table {
     text-align: center;
+}
+
+button {
+    margin-top: 10px;
+    width: 100%;
+}
+div.error-message{
+    color: red;
 }
 </style>

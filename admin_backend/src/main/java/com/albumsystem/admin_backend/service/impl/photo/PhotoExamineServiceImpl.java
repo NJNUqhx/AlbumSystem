@@ -36,11 +36,13 @@ public class PhotoExamineServiceImpl implements PhotoExamineService {
         if(photoMapper.selectById(photoId) == null)
         {
             map.put("error_message", "未查询到该照片");
+            return map;
         }else
         {
             photo = photoMapper.selectById(photoId);
             if(photo.getStatus().equals(examination)){
                 map.put("error_message", "审核状态未改变");
+                return map;
             }
             photo.setStatus(examination);
             photoMapper.updateById(photo);

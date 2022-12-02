@@ -36,11 +36,13 @@ public class CommentHandleServiceImpl implements CommentHandleService {
         if(commentReportMapper.selectById(reportId) == null)
         {
             map.put("error_message", "未查询到该评论举报");
+            return map;
         }else
         {
             commentReport = commentReportMapper.selectById(reportId);
             if(commentReport.getStatus().equals(handle)){
                 map.put("error_message", "处理状态未改变");
+                return map;
             }
             commentReport.setStatus(handle);
             commentReportMapper.updateById(commentReport);
