@@ -47,10 +47,10 @@ create table comment
 (
     comment_id int auto_increment
         primary key,
-    user_id    int                not null,
-    content    varchar(128)       not null,
-    status     smallint default 0 null,
-    time       datetime           null,
+    user_id    int           not null,
+    content    varchar(128)  not null,
+    time       datetime      null,
+    status     int default 0 null,
     constraint comment_id
         unique (comment_id),
     constraint comment_user_user_id_fk
@@ -85,6 +85,7 @@ create table comment_report
     user_id    int                not null,
     reason     varchar(128)       null,
     status     smallint default 0 null,
+    time       datetime           null,
     constraint report_id
         unique (report_id),
     constraint comment_report_comment_comment_id_fk
@@ -131,7 +132,7 @@ create table moment
     description varchar(128)       null,
     star        int      default 0 null,
     time        datetime           null,
-    status      smallint default 0 null,
+    status      int      default 0 null,
     constraint moment_id
         unique (moment_id),
     constraint moment_user_user_id_fk
@@ -159,6 +160,7 @@ create table moment_report
     user_id   int                not null,
     reason    varchar(128)       null,
     status    smallint default 0 null,
+    time      datetime           null,
     constraint report_id
         unique (report_id),
     constraint moment_report_moment_moment_id_fk

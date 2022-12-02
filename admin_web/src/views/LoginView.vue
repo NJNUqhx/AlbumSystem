@@ -63,6 +63,8 @@ export default {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({ name: 'home' });
+                        },error(){
+                            
                         }
                     })
                 },

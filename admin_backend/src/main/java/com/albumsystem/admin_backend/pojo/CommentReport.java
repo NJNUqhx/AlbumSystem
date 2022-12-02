@@ -8,15 +8,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
-    @TableId(type = IdType.AUTO)
+public class CommentReport {
+    @TableId(type= IdType.AUTO)
+    private Integer reportId;
     private Integer commentId;
     private Integer userId;
-    private String content;
+    private String reason;
+    private Integer status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date time;
-    private Integer status;
 }

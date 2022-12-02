@@ -32,7 +32,7 @@ public class PhotoExamineServiceImpl implements PhotoExamineService {
         Admin admin = loginAdmin.getAdmin();
 
         Map<String,String> map = new HashMap<>();
-        Photo photo = new Photo();
+        Photo photo;
         if(photoMapper.selectById(photoId) == null)
         {
             map.put("error_message", "未查询到该照片");
@@ -45,15 +45,14 @@ public class PhotoExamineServiceImpl implements PhotoExamineService {
             photo.setStatus(examination);
             photoMapper.updateById(photo);
 
+            Date time = new Date();
+            PhotoExamineResult photoExamineResult;
             if(examination.equals(1)) {
-                Date time = new Date();
-                PhotoExamineResult photoExamineResult = new PhotoExamineResult(null,photoId,userId,"审核通过",advice,admin.getAdminId(),time);
-                photoExamineResultMappper.insert(photoExamineResult);
+                photoExamineResult = new PhotoExamineResult(null, photoId, userId, "审核通过", advice, admin.getAdminId(), time);
             }else{
-                Date time = new Date();
-                PhotoExamineResult photoExamineResult = new PhotoExamineResult(null,photoId,userId,"审核失败",advice,admin.getAdminId(),time);
-                photoExamineResultMappper.insert(photoExamineResult);
+                photoExamineResult = new PhotoExamineResult(null, photoId, userId, "审核失败", advice, admin.getAdminId(), time);
             }
+            photoExamineResultMappper.insert(photoExamineResult);
 
             map.put("error_message", "success");
         }
