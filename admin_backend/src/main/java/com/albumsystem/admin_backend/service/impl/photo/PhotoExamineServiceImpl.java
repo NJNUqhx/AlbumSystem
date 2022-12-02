@@ -49,8 +49,10 @@ public class PhotoExamineServiceImpl implements PhotoExamineService {
             PhotoExamineResult photoExamineResult;
             if(examination.equals(1)) {
                 photoExamineResult = new PhotoExamineResult(null, photoId, userId, "审核通过", advice, admin.getAdminId(), time);
-            }else{
+            }else if(examination.equals(2)){
                 photoExamineResult = new PhotoExamineResult(null, photoId, userId, "审核失败", advice, admin.getAdminId(), time);
+            }else{
+                photoExamineResult = new PhotoExamineResult(null, photoId, userId, "撤销审核", advice, admin.getAdminId(), time);
             }
             photoExamineResultMappper.insert(photoExamineResult);
 

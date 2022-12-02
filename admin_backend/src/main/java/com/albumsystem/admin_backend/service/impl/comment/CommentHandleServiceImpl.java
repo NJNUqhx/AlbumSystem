@@ -49,16 +49,20 @@ public class CommentHandleServiceImpl implements CommentHandleService {
             CommentHandleResult commentHandleResult;
             Comment comment = commentMapper.selectById(commentReport.getCommentId());
             if(handle.equals(1)) {
+                // 1 表示 comment 被删除
                 comment.setStatus(1);
                 commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "删除评论", advice, admin.getAdminId(), time);
                 commentMapper.updateById(comment);
             }else if(handle.equals(2)){
-                comment.setStatus(0);
+                // 2 表示 comment 被举报但保留
+                comment.setStatus(2);
                 commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "保留评论", advice, admin.getAdminId(), time);
                 commentMapper.updateById(comment);
             }else{
+                // 0 表示 comment 还原到未处理的状态
                 comment.setStatus(0);
                 commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "撤销处理", advice, admin.getAdminId(), time);
+                commentMapper.updateById(comment);
             }
             commentHandleResultMapper.insert(commentHandleResult);
 
