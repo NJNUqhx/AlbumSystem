@@ -6,6 +6,7 @@ import com.albumsystem.admin_backend.mapper.CommentReportMapper;
 import com.albumsystem.admin_backend.pojo.*;
 import com.albumsystem.admin_backend.service.comment.CommentHandleService;
 import com.albumsystem.admin_backend.service.impl.utils.UserDetailsImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,22 +50,24 @@ public class CommentHandleServiceImpl implements CommentHandleService {
 
             Date time = new Date();
             CommentHandleResult commentHandleResult;
-            Comment comment = commentMapper.selectById(commentReport.getCommentId());
+            QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("comment_id",commentReport.getCommentId());
+            Comment comment = commentMapper.selectOne(queryWrapper);
             if(handle.equals(1)) {
                 // 1 表示 comment 被删除
-                comment.setStatus(1);
-                commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "删除评论", advice, admin.getAdminId(), time);
-                commentMapper.updateById(comment);
+                comment.setStatus(handle);
+                commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "举报成功->删除评论", advice, admin.getAdminId(), time);
+                commentMapper.update(comment,queryWrapper);
             }else if(handle.equals(2)){
                 // 2 表示 comment 被举报但保留
-                comment.setStatus(2);
-                commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "保留评论", advice, admin.getAdminId(), time);
-                commentMapper.updateById(comment);
+                comment.setStatus(handle);
+                commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "举报失败->保留评论", advice, admin.getAdminId(), time);
+                commentMapper.update(comment,queryWrapper);
             }else{
                 // 0 表示 comment 还原到未处理的状态
-                comment.setStatus(0);
-                commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "撤销处理", advice, admin.getAdminId(), time);
-                commentMapper.updateById(comment);
+                comment.setStatus(handle);
+                commentHandleResult = new CommentHandleResult(null, commentReport.getCommentId(), userId, "撤销处理->默认状态", advice, admin.getAdminId(), time);
+                commentMapper.update(comment,queryWrapper);
             }
             commentHandleResultMapper.insert(commentHandleResult);
 

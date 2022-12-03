@@ -37,10 +37,9 @@
                         <div class="btn-group-vertical">
                             <button class="btn btn-success" @click="commentHandle(comment, 1)">举报成功</button>
                             <button class="btn btn-danger"  @click="commentHandle(comment, 2)">举报失败</button>
+                            <button class="btn btn-info"  @click="commentHandle(comment, 0)">撤销处理</button>
                         </div>
-                        <div class="error-message" :id="'error-message' + comment['reportId']">
-                            {{ error_message }}
-                        </div>
+                        
                     </td>
                 </tr>
             </tbody>
@@ -162,13 +161,14 @@ export default {
                 },
                 success(resp) {
                     if(resp.error_message !== "success")
-                        error_message.value = resp.error_message;
+                        alert(resp.error_message)
                 },
                 error() {
                     console.log("error");
                 }
             })
-            getCommentList();
+            // getCommentList();
+            window.location.reload();
         }
 
         getCommentList();

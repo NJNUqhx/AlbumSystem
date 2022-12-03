@@ -50,6 +50,9 @@ public class CommentReportListController {
         List<Integer> id = commentReportListService.commentReportListId();
         List<Comment> commentContentList = commentReportListService.commentContentList(id);
         List<CommentReport> commentReportList = commentReportListService.commentReportList(id);
+//        System.out.println(id);
+//        System.out.println(commentContentList);
+//        System.out.println(commentReportList);
         List<Map<String, String>> list = new ArrayList<>();
         if(commentContentList.size() != commentReportList.size()) return null;
         for(int i = 0; i < commentContentList.size(); i++)

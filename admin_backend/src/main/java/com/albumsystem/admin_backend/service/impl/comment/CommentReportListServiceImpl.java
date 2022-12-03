@@ -52,15 +52,14 @@ public class CommentReportListServiceImpl implements CommentReportListService{
 
         List<Comment> list = new ArrayList<>();
         QueryWrapper<CommentReport> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
         for(Integer id:idList){
             queryWrapper.clear();
+            commentQueryWrapper.clear();
             queryWrapper.eq("report_id", id);
             CommentReport commentReport = commentReportMapper.selectOne(queryWrapper);
-            Comment comment = commentMapper.selectById(commentReport.getCommentId());
-            if(comment == null)
-            {
-                return list;
-            }
+            commentQueryWrapper.eq("comment_id", commentReport.getCommentId());
+            Comment comment = commentMapper.selectOne(commentQueryWrapper);
             list.add(comment);
         }
 
@@ -68,10 +67,15 @@ public class CommentReportListServiceImpl implements CommentReportListService{
     }
 
     @Override
-    public List<CommentReport> commentReportList(List<Integer> id) {
+    public List<CommentReport> commentReportList(List<Integer> idList) {
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginAdmin = (UserDetailsImpl) authentication.getPrincipal();
         Admin admin = loginAdmin.getAdmin();
-        return commentReportMapper.selectBatchIds(id);
+        List<CommentReport> commentReportList = new ArrayList<>();
+        for(Integer id: idList){
+            CommentReport commentReport = commentReportMapper.selectById(id);
+            commentReportList.add(commentReport);
+        }
+        return commentReportList;
     }
 }

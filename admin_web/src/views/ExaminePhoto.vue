@@ -37,9 +37,7 @@
                         <div class="btn-group-vertical">
                             <button class="btn btn-success" @click="photoExamine(photo, 1)">审核通过</button>
                             <button class="btn btn-danger" @click="photoExamine(photo, 2)">审核失败</button>
-                        </div>
-                        <div>
-                            <text class="error-message" :id="'error-message' + photo.photoId"></text>
+                            <button class="btn btn-info" @click="photoExamine(photo, 0)">撤销审核</button>
                         </div>
                     </td>
                 </tr>
@@ -59,10 +57,8 @@ export default {
     },
     setup() {
         let photos = ref([]);
-        let error_message = ref('');
         let advice = ref('');
         let target = ref('');
-        let error_message_id = ref('');
         const jwt_token = localStorage.getItem("jwt_token");
         const getPhotoListAll = () => {
             $.ajax({
@@ -80,29 +76,27 @@ export default {
             })
         }
         const showStatus = (status) => {
-            if (status === 0)
+            if (String(status) === "0")
                 return "待审核";
-            else if (status === 1)
+            else if (String(status) === "1")
                 return "审核通过";
-            else if (status === 2)
+            else if (String(status) === "2")
                 return "审核失败";
             else
                 return "状态出错";
         }
         const showAuthority = (authority) => {
-            if (authority === 0)
+            if (String(authority) === "0")
                 return "所有人可见";
-            else if (authority === 1)
+            else if (String(authority) === "1")
                 return "仅好友可见";
-            else if (authority === 2)
+            else if (String(authority) === "2")
                 return "仅自己可见";
             else
                 return "状态出错";
         }
         const photoExamine = (photo, examination) => {
-            error_message.value = "";
             target = "#advice" + photo.photoId;
-            error_message_id = "#error-message" + photo.photoId;
             advice = $(target).val();
             $.ajax({
                 url: "http://127.0.0.1:3000/admin/photo/examine/",
@@ -117,13 +111,8 @@ export default {
                     examine: examination
                 },
                 success(resp) {
-                    if (resp.error_message === "success") {
-                        error_message.value = "";
-                    } else {
-                        // console.log(resp.error_message);
-                        $(error_message_id).val(resp.error_message);
-                        // console.log($(error_message_id).val());
-                        // $(error_message_id).error_message.value = resp.error_message;
+                    if (resp.error_message !== "success") {
+                        alert(resp.error_message)
                     }
                 },
                 error() {
@@ -139,7 +128,6 @@ export default {
             getPhotoListAll,
             showStatus,
             showAuthority,
-            error_message,
             photoExamine,
         }
     }
