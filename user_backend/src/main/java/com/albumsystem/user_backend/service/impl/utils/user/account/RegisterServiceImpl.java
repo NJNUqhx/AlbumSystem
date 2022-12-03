@@ -23,7 +23,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Map<String, String> register(String nickname, String password, String confirmedPassword) {
         Map<String, String> map = new HashMap<>();
-        if (nickname == null) {
+        if (nickname == null) {map.put("error_message", "昵称不能为空");
             map.put("error_message", "昵称不能为空");
             return map;
         }

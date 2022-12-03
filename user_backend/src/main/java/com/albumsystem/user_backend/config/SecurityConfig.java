@@ -39,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/account/token/", "/user/account/register/").permitAll()//公开的链接
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyRequest().authenticated()
-                .and().csrf().disable();//关闭CSRF保护即可。
+                .anyRequest().authenticated();
+                //.and().csrf().disable();//关闭CSRF保护即可。
 
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
