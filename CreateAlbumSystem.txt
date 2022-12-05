@@ -114,6 +114,7 @@ create table friend_application
     applicant_id int                not null,
     recipient_id int                not null,
     status       smallint default 0 null,
+    message      varchar(128)       null,
     constraint id
         unique (id),
     constraint friend_application_user_user_id_fk
