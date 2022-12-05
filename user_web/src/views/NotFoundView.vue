@@ -1,6 +1,6 @@
 <template>
     <ContentBase>
-        好友列表
+        NotFound404
     </ContentBase>
 </template>
 

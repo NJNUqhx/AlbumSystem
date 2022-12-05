@@ -4,7 +4,7 @@
             <div class="col-3">
                 <form @submit.prevent="login">
                     <div class="mb-3">
-                        <label for="account" class="form-label">账号</label>
+                        <label for="account" class="form-label">用户名</label>
                         <input v-model="account" type="text" class="form-control" id="userid">
                     </div>
                     <div class="mb-3">
@@ -39,11 +39,11 @@ export default {
         let error_message = ref('');
 
         const jwt_token = localStorage.getItem("jwt_token");
+        
         if(jwt_token){
             store.commit("updateToken", jwt_token);
             store.dispatch("getinfo",{
                 success(){
-                    router.put({name: "home"});
                     store.commit("updatePullingInfo", false);
                 },
                 error(){
@@ -64,7 +64,6 @@ export default {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({ name: 'home' });
-                            // console.log(store.state.admin);
                         },
                         error(){
                             console.log("获取用户信息失败");
