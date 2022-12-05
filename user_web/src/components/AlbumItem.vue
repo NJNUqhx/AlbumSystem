@@ -6,6 +6,7 @@
         <div class="file-name">
           <slot></slot>
         </div>
+        <!--<div class="file-name">{{album.name}}</div>-->
       </div>
     </div>
   </div>
@@ -17,9 +18,18 @@
 import router from '@/router/index';
 export default {
   name: "AlbumItem",
-
+  
+/*   props: {
+            album: {
+                type: Object,
+                required: true,
+            },
+        }, */
+  
   setup() {
+    
     const album_display = () => {
+      /*将album.name作为路由参数*/
       router.push({ name: 'myalbum_1' });
     };
 

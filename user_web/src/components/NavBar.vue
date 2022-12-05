@@ -35,8 +35,7 @@
         </li>
       </ul>
 
-      <ul class="navbar-nav" v-else>
-        
+      <ul class="navbar-nav" v-else>       
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             消息
@@ -52,11 +51,11 @@
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ $store.state.user.username }}
+            {{ $store.state.user.account }}
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
-                <router-link class="dropdown-item" :to="{name: 'userprofile', params: {userId: $store.state.user.id}}">我的动态</router-link>
+                <router-link class="dropdown-item" :to="{name: 'userprofile', params:{userid:1}}">我的动态</router-link>
             </li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#" @click="logout">退出</a></li>
