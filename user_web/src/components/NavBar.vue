@@ -1,7 +1,7 @@
 <template>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <router-link class="navbar-brand" :to="{name: 'home'}">Album System</router-link>
+    <router-link class="navbar-brand" :to="{name: 'home'}">AlbumSystem</router-link>
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -43,7 +43,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#friend-request">好友申请</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#report-list">举报</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#report-list">举报信息</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#report-list">审核信息</a></li>
           </ul>
@@ -51,7 +51,7 @@
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ $store.state.user.account }}
+            {{ $store.state.user.nickname }}
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
@@ -104,12 +104,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">举报</h5>
+                <h5 class="modal-title" id="exampleModalLabel">举报信息</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">申请</label>
+                    <label for="exampleFormControlInput1" class="form-label">申请信息</label>
                 </div>
             </div>
             <div class="modal-footer">

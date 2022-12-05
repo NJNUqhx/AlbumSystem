@@ -15,7 +15,6 @@ public class PhotoAddController {
 
     @PostMapping("/user/photo/add/")
     public Map<String,String> add(@RequestParam Map<String,String> data){
-        //System.out.println(data);
         return photoAddService.add(data);
     }
 }
