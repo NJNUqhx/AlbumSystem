@@ -99,9 +99,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <input type="file" id="importFile" />
+<!--           <input type="file" id="importFile" />
           <input type="button" @click="upload()"/>
-
+ -->
 
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">照片名</label>
@@ -156,13 +156,13 @@
       forceRerender(){
         this.componentKey += 1;
       },
-      openFile: function () {
+/*       openFile: function () {
         document.getElementById('open').click()
       },
      showRealPath: function () {
         document.getElementById('input01').value = document.getElementById('open').files[0].path;
         console.log(document.getElementById('open').files[0].path);
-      },
+      }, */
     },
 
     setup() {
@@ -171,13 +171,13 @@
         let photo_info = ref([]);
         const jwt_token = localStorage.getItem("jwt_token");
 
-        const upload = () => {
+    /*     const upload = () => {
           var filename = document.getElementById("importFile").value;
           //var file = document.getElementById("importFile").files.item(0).getAsDataURL();
           // 这时的filename不是 importFile 框中的值
           alert(filename);
           //alert(file);
-      }
+      } */
         const refresh_photos = () => {
           $.ajax({
             url: "http://127.0.0.1:3000/user/photo/getList/",
@@ -289,7 +289,7 @@
           showAuthority,
           delete_photo,
           retrieve_photo,
-          upload,
+          //upload,
           photos
         }
     }
