@@ -20,4 +20,5 @@ public class PhotoUpdateController {
     public Map<String,String> update(@RequestParam Map<String,String> data){
         return photoUpdateService.update(data);
     }
+
 }
