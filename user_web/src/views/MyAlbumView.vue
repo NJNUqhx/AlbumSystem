@@ -7,18 +7,18 @@
         <div class="card">
           <h5 class="card-header">当前位置：</h5>
             <div class="card-body">
-              <table class="album-table">
+              <table class="album-table" :key="componentKey">
                 <!--列举相册-->
-                <!--
+                
                 <tr v-for="album in albums" :key= "album.albumId">
                 <td><AlbumItem :album="album"></AlbumItem></td>
                 </tr>
-                -->
-                <tr>
+               
+              <!--   <tr>
                 <td><AlbumItem>相册1</AlbumItem></td>
                 <td><AlbumItem>相册2</AlbumItem></td>
                 <td><AlbumItem>相册3</AlbumItem></td>
-                </tr>
+                </tr> -->
             </table>
               <a href="#" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#createAlbum">新建相册</a>
             </div>
@@ -39,14 +39,14 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">相册名</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Album name">
+            <input v-model="new_album.name" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Album name">
           </div>
           
           <label for="basic-url" class="form-label">相册权限</label>
-          <select class="form-select" aria-label="Default select example">
-            <option selected>选择相册权限</option>
-            <option value="1">公开</option>
-            <option value="2">私有</option>
+          <select v-model="new_album.authority" class="form-select" aria-label="Default select example">
+            <option value="0">所有人可见</option>
+            <option value="1">仅好友可见</option>
+            <option value="2">仅自己可见</option>
           </select>
 
         <!--   <div class="mb-3">
@@ -55,13 +55,13 @@
           </div> -->
           <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">相册简介</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <textarea v-model="new_album.description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
           </div>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary">创建</button>
+          <button type="button" class="btn btn-primary" @click="add_album()">创建</button>
         </div>
       </div>
     </div>
@@ -71,9 +71,10 @@
   <script>
   import AlbumItem from '@/components/AlbumItem'
   import FooterView from '@/components/Footer'
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import $ from 'jquery'
   import router from '@/router/index';
+  import { Modal } from 'bootstrap/dist/js/bootstrap'
 
   //import { useStore } from 'vuex'
 
@@ -83,18 +84,32 @@
       AlbumItem,
       FooterView,
     },
-
+    data(){
+      return {
+        componentKey: 0,
+      }
+    },
+    methods: {
+      forceRerender(){
+        this.componentKey += 1;
+      }
+    },
     setup(){
       //const store = useStore();
-      let albums= ref([]);
+      let albums = ref([]);
       //let new_album = ref([]);
+      const new_album = reactive({
+            name: "",
+            authority: "0",
+            description: "",
+        });
 
       const jwt_token = localStorage.getItem("jwt_token");
 
       //获取相册列表
       const refresh_albums = () => {
           $.ajax({
-            url: "http://127.0.0.1:3000/user/photo/getList/",
+            url: "http://127.0.0.1:3000/user/album/getList/",
             type: "post",
             headers:{
               Authorization: "Bearer " + jwt_token, 
@@ -108,24 +123,26 @@
             }      
           });
         }
-      //refresh_albums();
+      refresh_albums();
 
       //添加相册
       const add_album = () => {
           $.ajax({
-            url: "http://127.0.0.1:3000/user/photo/getList/",
+            url: "http://127.0.0.1:3000/user/album/add/",
             type: "post",
             headers:{
               Authorization: "Bearer " + jwt_token,
             },
-            /* data:{
-              album_name: new_album.album_name,
-              album_authority: new_album.authority,
-              album_description: new_album.description,
-            }, */
+            data:{
+              name: new_album.name,
+              authority: new_album.authority,
+              description: new_album.description,
+            }, 
             success(resp) {
               console.log(resp);
-              albums.value = resp;
+              Modal.getInstance('#createAlbum').hide();
+              refresh_albums();
+              this.forceRerender();
             },
             error(resp) {
               console.log(resp);
@@ -142,6 +159,8 @@
       return {
         refresh_albums,
         add_album,
+        albums,
+        new_album,
         //get_index,
 
       }

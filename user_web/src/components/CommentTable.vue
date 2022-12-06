@@ -74,7 +74,7 @@
   <script>
   //import { ref } from 'vue'
   import $ from 'jquery'
-  import router from '@/router/index';
+  //import router from '@/router/index';
   import { Modal } from 'bootstrap/dist/js/bootstrap'
 
       export default {
@@ -89,10 +89,10 @@
           //const new_comment = ref('');
           const jwt_token = localStorage.getItem("jwt_token");
 
-          const get_index= () => {
+         /*  const get_index= () => {
                 console.log(router.currentRoute.value.path);
               }
-          get_index();
+          get_index(); */
 
           //添加评论
           const add_comment = () => {

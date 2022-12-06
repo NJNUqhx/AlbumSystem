@@ -3,10 +3,10 @@
     <div class="card">
       <div class="body">
         <img class="file-img" src='~@/assets/folder3.png' @click="album_display" />
-        <div class="file-name">
+<!--         <div class="file-name">
           <slot></slot>
-        </div>
-        <!--<div class="file-name">{{album.name}}</div>-->
+        </div> -->
+        <div class="file-name">{{album.name}}</div>
       </div>
     </div>
   </div>
@@ -19,18 +19,18 @@ import router from '@/router/index';
 export default {
   name: "AlbumItem",
   
-/*   props: {
+  props: {
             album: {
                 type: Object,
                 required: true,
             },
-        }, */
+        },
   
-  setup() {
-    
+  setup(props) {
+    //const album = 
     const album_display = () => {
       /*将album.name作为路由参数*/
-      router.push({ name: 'myalbum_1' });
+      router.push({ name: 'myalbum_1', params:{album_id: props.album.albumId }});
     };
 
     return {

@@ -1,54 +1,61 @@
 <template>
     <div class="container">
         <div class="card">
-            <div class="card-body">          
+            <div class="card-body">
                 <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="输入昵称或账号" aria-label="Recipient's username"
-                                aria-describedby="button-addon2">
-                            <div class="btn-group">
-                                <button type="button" id="search-btn" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    搜索
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">按昵称搜索</a></li>
-                                    <li><a class="dropdown-item" href="#">按账号搜索</a></li>
-                                </ul>
-                            </div>
+                    <input type="text" v-model="content" class="form-control" placeholder="输入昵称或账号">
+                    <div class="btn-group">
+                        <button type="button" id="search-btn" class="btn btn-success dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            搜索
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" @click="getSearchList(content, '1')">按昵称搜索</a></li>
+                            <li><a class="dropdown-item" @click="getSearchList(content, '2')">按账号搜索</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <!--@click="open_user_profile(user.id)"-->
                 <div class="card" v-for="user in users" :key="user.id">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-2">
-                                <img class="img-fluid" :src="user.photo" alt="">
+                                <img class="img-fluid" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.4uvuajAOVfVs7fzbr_agNQAAAA?w=174&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="">
                             </div>
                             <div class="col-4">
-                                <div class="username">{{ user.username }}</div>
+                                <div class="account">{{ user.userId }}</div>
+                                <div class="account">{{ user.account }}</div>
+                                <div class="account">{{ user.nickname }}</div>
                             </div>
                             <div class="col-6">
                                 <div class="btn-group-vertical">
-                                    <div id="addFriend" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">添加好友</div>
+                                    <div id="addFriend" class="btn" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">添加好友</div>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">好友申请</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">申请</label>
-                                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="交个朋友吧~">
+                                    <div class="modal fade" id="exampleModal" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">好友申请</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="exampleFormControlInput1"
+                                                            class="form-label">申请</label>
+                                                        <input type="text" v-model="messsage" class="form-control"
+                                                            id="exampleFormControlInput1" placeholder="交个朋友吧~">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">取消</button>
+                                                    <button type="button" class="btn btn-primary" @click="sendApplication(user.userId)">发送</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                            <button type="button" class="btn btn-primary">发送</button>
-                                        </div>
-                                        </div>
-                                    </div>
                                     </div>
                                     <div id="visitAlbum" class="btn">访问相册</div>
                                     <div id="visitMoment" class="btn">访问动态</div>
@@ -64,11 +71,8 @@
 
 
 <script>
-//import ContentBase from '../components/ContentBase'
 import $ from 'jquery'
 import { ref } from 'vue'
-import router from '@/router/index';
-import { useStore } from 'vuex';
 
 export default {
     name: 'UserListView',
@@ -77,35 +81,85 @@ export default {
     },
 
     setup() {
-        const store = useStore();
+        const jwt_token = localStorage.getItem("jwt_token");
         let users = ref([]);
+        let message = ref("交个朋友吧~");
+        let content = ref("");
 
-        $.ajax({
-            url: "https://app165.acapp.acwing.com.cn/myspace/userlist/",
-            type: "get",
-            success(resp) {
-                users.value = resp;
-            }
-        });
 
-        const open_user_profile = userId => {
-            if (store.state.user.is_login) {
-                router.push({
-                    name: "userprofile",
-                    params: {
-                        userId
-                    }
-                })
-            } else {
-                router.push({
-                    name: "login"
-                });
-            }
+        const getSearchList = (content, choice) => {
+            let nickname = ref("");
+            let account  = ref("");
+            if(choice === "1") nickname.value = content;
+            else account.value = content;
+            
+            $.ajax({
+                url: "http://127.0.0.1:3000/user/friend/search/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                data:{
+                    nickname: nickname.value,
+                    account: account.value,
+                },
+                success(resp) {
+                    users.value = resp;
+                },
+                error() {
+                }
+            })
+        }
+        
+        const getAllFriends = () =>{
+            $.ajax({
+                url: "http://127.0.0.1:3000/user/friend/getList/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                success(resp) {
+                    
+                    users.value = resp;
+                },
+                error() {
+                    
+                }
+            })
         }
 
+        const sendApplication = (id) =>{
+            console.log(id);
+            $.ajax({
+                url: "http://127.0.0.1:3000/user/friend/sendApplication/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                data:{
+                    recipient_id: id,
+                    message: message.value
+                },
+                success(resp) {
+                    // 此处关闭弹窗
+                    if(resp.error_message !== "success"){
+                        alert(resp.error_message);
+                    }
+                },
+                error() {
+                }
+            })
+            getAllFriends();
+        }
+
+        getAllFriends();
         return {
             users,
-            open_user_profile
+            message,
+            content,
+            getSearchList,
+            getAllFriends,
+            sendApplication
         }
     }
 }

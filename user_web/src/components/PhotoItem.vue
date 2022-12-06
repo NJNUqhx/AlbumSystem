@@ -1,20 +1,20 @@
 <template>
-  <img class="file-img" :src="require('D:/GitHub/AlbumSystem/images/' + photo.userId + '/' + photo.photoId + '.png')" />
+  <img class="file-img" :src="require('D:/GitHub/AlbumSystem/images/' + photo.userId + '/' + photo.photoId + '.jpg')" />
   <div class="file-name">{{photo.name}}</div>
   <div class="btn-group">
     <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
       操作
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editPhoto" @click="get_photo_info()">显示信息</a></li>
-      <li><a class="dropdown-item" href="#">下载照片</a></li>
-      <li><a class="dropdown-item" href="#" @click="update_photo(photo)">编辑照片</a></li>
+      <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#showPhoto" >显示信息</a></li>
+      <!-- <li><a class="dropdown-item" href="#">下载照片</a></li> -->
+      <!-- <li><a class="dropdown-item" href="#" @click="update_photo()">编辑照片</a></li> -->
       <li><a class="dropdown-item" href="#">删除照片</a></li>
     </ul>
   </div>
 
     <!-- Modal -->
-  <div class="modal fade" id="editPhoto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="showPhoto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -24,15 +24,16 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-7">
-              <img class="file-img-2" :src="require('D:/GitHub/AlbumSystem/images/' + photo.userId + '/' + photo.photoId + '.png')" />
+              <img class="file-img-2" :src="require('D:/GitHub/AlbumSystem/images/' + photo.userId + '/' + photo.photoId + '.jpg')" />
             </div>
             <div class="col-5">
               <div class="card">
                 <div class="card-body">
-                  <div class="photo-name"><b>照片名：</b>{{get_photo_info(photo_id)}}</div>
-                  <div class="createtime"><b>创建时间：</b>{{photo_info.time}}</div>
-                  <div class="createtime"><b>权限：</b>{{showAuthority(photo_info.authority)}}</div>
-                  <div class="description"><b>简介：</b>....</div>
+                  <div class="photo-name"><b>照片名：</b>{{photo.name}}</div>
+                  <div class="createtime"><b>创建时间：</b>{{photo.time}}</div>
+                  <div class="createtime"><b>权限：</b>{{showAuthority(photo.authority)}}</div>
+                  <div class="status"><b>审核状态：</b>{{showStatus(photo.status)}}</div>
+                  <!-- <div class="description"><b>简介：</b>....</div> -->
                 </div>
               </div>
             </div>
@@ -46,7 +47,7 @@
 
 <script>
 import $ from 'jquery'
-import { ref } from 'vue'
+//import { ref } from 'vue'
 
 export default {
   name: "PhotoItem",
@@ -57,16 +58,22 @@ export default {
             },
         },
  
- /*  data(){
+  data(){
     return{
-      photo_id: this.photo.photoId,
+      photo_info: this.photo,
     }
-  }, */
-
-  setup(){
+  },
+  watch: {
+    photo(val){
+        this.photo_info= val;
+    }
+  },
+  setup(props){
     const jwt_token = localStorage.getItem("jwt_token");
-    let photo_info = ref([]);
-    const get_photo_info = (photo) => {
+    //let photo_info = ref([]);
+    
+    
+    const get_photo_info = () => {
             $.ajax({
                 url: "http://127.0.0.1:3000/user/photo/getPhoto/",
                 type: "post",
@@ -74,7 +81,7 @@ export default {
                     Authorization: "Bearer " + jwt_token,
                 },
                 data: {
-                    photo_id: photo.photoId,
+                    photo_id: props.photo.photoId,
                 },
                 success(resp) {
                     /*
@@ -89,7 +96,7 @@ export default {
                 }
             })
         }
-    const update_photo = (photo) => {
+    const update_photo = () => {
         $.ajax({
             url: "http://127.0.0.1:3000/user/photo/update/",
             type: "post",
@@ -97,7 +104,7 @@ export default {
                 Authorization: "Bearer " + jwt_token,
             },
             data: {
-                photo_id: photo.photoId,
+                photo_id: props.photo.photoId,
                 authority: 1,
                 name: "new1"
             },
@@ -122,11 +129,22 @@ export default {
         else
             return "状态出错";
     }
+    const showStatus = (status) => {
+        if (String(status) === "0")
+            return "未审核";
+        else if (String(status) === "1")
+            return "审核通过";
+        else if (String(status) === "2")
+            return "审核失败";
+        else
+            return "状态出错";
+    }
       return {
         get_photo_info,
         showAuthority,
         update_photo,
-        photo_info,
+        showStatus,
+        //photo_info,
       }
   }
 

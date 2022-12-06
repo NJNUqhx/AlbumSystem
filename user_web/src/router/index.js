@@ -62,9 +62,10 @@ const routes = [
     component: MyPhotoView
   },
   {
-    path: '/myalbum/album1',
+    path: '/myalbum/:album_id',
     name: 'myalbum_1',
-    component: AlbumView
+    component: AlbumView,
+    props: true
   },
   {
     path: '/moments/',

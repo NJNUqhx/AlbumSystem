@@ -52,7 +52,10 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_message == "success")
+                    {   
+                        alert('账号: ' + resp.account +'\n' + '密码: ' + resp.password);
                         router.push({ name: "login" });
+                    }
                     else {
                         error_message.value = resp.error_message;
                     }
