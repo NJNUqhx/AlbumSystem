@@ -49,7 +49,7 @@ public class FriendApplicationServiceImpl implements FriendApplicationService {
 //        System.out.println(friendMapper.exists(queryWrapper1));
 //        System.out.println(friendMapper.exists(queryWrapper2));
         if(friendMapper.exists(queryWrapper1) || friendMapper.exists(queryWrapper2)){
-            map.put("error_success","已为好友，不可重复申请");
+            map.put("error_message","已为好友，不可重复申请");
             return map;
         }
 
@@ -60,8 +60,8 @@ public class FriendApplicationServiceImpl implements FriendApplicationService {
         else if (message.length()==0){
             message = "null";
         }
-        FriendApplication friendApplication = new FriendApplication(null,applicantId,recipientId, message, status);
 
+        FriendApplication friendApplication = new FriendApplication(null,Math.min(applicantId,recipientId),Math.max(applicantId,recipientId), message, status);
         friendApplicationMapper.insert(friendApplication);
         map.put("error_message","success");
         return map;
