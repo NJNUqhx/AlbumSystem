@@ -63,7 +63,7 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
     }
 
     @Override
-    public List<Photo> getPhotoList(Map<String, String> data) {
+    public List<Integer> getPhotoList(Map<String, String> data) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
@@ -77,12 +77,15 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
         queryWrapper.eq("album_id", albumId);
         List<PhotoToAlbum> photoToAlbumList = photoAlbumMapper.selectList(queryWrapper);
         List<Photo> photoList = new ArrayList<>();
+        List<Integer> idList = new ArrayList<>();
         for(PhotoToAlbum photoAlbum: photoToAlbumList){
             photo_queryWrapper.clear();
             photo_queryWrapper.eq("photo_id", photoAlbum.getPhotoId());
-            photoList.add(photoMapper.selectOne(photo_queryWrapper));
+            Photo new_photo =photoMapper.selectOne(photo_queryWrapper);
+            photoList.add(new_photo);
+            idList.add(new_photo.getPhotoId());
         }
-        return photoList;
+        return idList;
 //        List<PhotoAlbum> list = photoAlbumMapper.selectList(queryWrapper);
 ////        System.out.println(list);
 //        List<Integer> idList = new ArrayList<>();

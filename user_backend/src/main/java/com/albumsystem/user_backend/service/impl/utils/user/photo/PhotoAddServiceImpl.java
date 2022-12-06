@@ -32,11 +32,14 @@ public class PhotoAddServiceImpl implements PhotoAddService {
         Map<String, String> map = new HashMap<>();
 
         String name = data.get("name");
-        String address = "D://GitHub//AlbumSystem//images//temp//temp.jpg";
+        String address = data.get("address");
         Short authority = Short.parseShort(data.get("authority"));
         Short status = 0;
 
-
+        if(address == null || address.length()==0){
+            map.put("error_message","地址不能为空！");
+            return map;
+        }
         if(authority!=0&&authority!=1&&authority!=2){
             map.put("error_message","权限设置有误！");
             return map;
@@ -48,20 +51,10 @@ public class PhotoAddServiceImpl implements PhotoAddService {
         photoMapper.insert(photo);
 
         int length = address.length();
-//        String endIndex = address.substring(length-4,length);
-        String endIndex = ".jpg";
-        String path = "D:\\Github\\AlbumSystem\\images\\" + user.getUserId();
-        File folder = new File(path);
-        if(!folder.exists()){
-            boolean success = folder.mkdirs();
-            if(!success)
-            {
-                map.put("error_message","未查询到指定路径");
-                return map;
-            }
-        }
+        String endIndex = address.substring(length-4,length);
+        System.out.println(endIndex);
         String new_address = "D:\\Github\\AlbumSystem\\images\\" + user.getUserId() + '\\' + photo.getPhotoId() + endIndex;// + ".jpg";
-
+        System.out.println(new_address);
 
         InputStream is=null;
         OutputStream os=null;
