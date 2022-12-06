@@ -15,7 +15,7 @@ const routes = [
     path: "/",
     name: "home",
     component: AdminHome,
-    meta:{
+    meta: {
       requestAuth: true,
     }
   },
@@ -23,7 +23,7 @@ const routes = [
     path: "/examine/photo/",
     name: "examinephoto",
     component: ExaminePhoto,
-    meta:{
+    meta: {
       requestAuth: true,
     }
   },
@@ -31,7 +31,7 @@ const routes = [
     path: "/examine/moment/",
     name: "examinemoment",
     component: ExamineMoment,
-    meta:{
+    meta: {
       requestAuth: true,
     }
   },
@@ -39,7 +39,7 @@ const routes = [
     path: "/handle/comment/",
     name: "handlecomment",
     component: HandleComment,
-    meta:{
+    meta: {
       requestAuth: true,
     }
   },
@@ -47,7 +47,7 @@ const routes = [
     path: "/handle/moment/",
     name: "handlemoment",
     component: HandleMoment,
-    meta:{
+    meta: {
       requestAuth: true,
     }
   },
@@ -55,7 +55,7 @@ const routes = [
     path: "/404/",
     name: "404",
     component: NotFound,
-    meta:{
+    meta: {
       requestAuth: false,
     }
   },
@@ -63,7 +63,7 @@ const routes = [
     path: "/admin/account/login/",
     name: "login",
     component: LoginView,
-    meta:{
+    meta: {
       requestAuth: false,
     }
   },
@@ -71,7 +71,7 @@ const routes = [
     path: "/admin/account/register/",
     name: "register",
     component: RegisterView,
-    meta:{
+    meta: {
       requestAuth: false,
     }
   },
@@ -86,10 +86,22 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) =>{
-  if(to.meta.requestAuth && !store.state.admin.is_login){
-    next({name: "login"});
-  }else{
+router.beforeEach((to, from, next) => {
+  const jwt_token = localStorage.getItem("jwt_token");
+    if (jwt_token) {
+    store.commit("updateToken", jwt_token);
+    store.dispatch("getinfo", {
+      success() {
+      },
+      error() {
+        alert("token无效,请重新登录!");
+        router.push({ name: 'login' });
+      }
+    })
+  } 
+  if (!jwt_token && to.meta.requestAuth && !store.state.admin.is_login) {
+    next({ name: "login" });
+  } else {
     next();
   }
 })
