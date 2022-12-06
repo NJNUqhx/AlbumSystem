@@ -14,5 +14,6 @@ public class FriendApplication {
     private Integer id;
     private Integer applicantId;
     private Integer recipientId;
+    private String message;
     private Short status;
 }

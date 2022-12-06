@@ -63,7 +63,48 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
     }
 
     @Override
-    public List<Integer> getPhotoList(Map<String, String> data) {
+    public List<Photo> getPhotoList(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<PhotoToAlbum> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<Photo> photo_queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("album_id").orderByDesc("photo_id");
+
+        int albumId = Integer.parseInt(data.get("album_id"));
+        queryWrapper.eq("album_id", albumId);
+        List<PhotoToAlbum> photoToAlbumList = photoAlbumMapper.selectList(queryWrapper);
+        List<Photo> photoList = new ArrayList<>();
+        for(PhotoToAlbum photoAlbum: photoToAlbumList){
+            photo_queryWrapper.clear();
+            photo_queryWrapper.eq("photo_id", photoAlbum.getPhotoId());
+            Photo new_photo =photoMapper.selectOne(photo_queryWrapper);
+            photoList.add(new_photo);
+        }
+        return photoList;
+//        List<PhotoAlbum> list = photoAlbumMapper.selectList(queryWrapper);
+////        System.out.println(list);
+//        List<Integer> idList = new ArrayList<>();
+//        for(PhotoAlbum photoAlbum:list){
+//            idList.add(photoAlbum.getAlbumId());
+//        }
+//        List<Photo> ans = new ArrayList<>();
+//        for(Integer id:idList){
+//            queryWrapper.clear();
+//            photo_queryWrapper.clear();
+//            queryWrapper.eq("album_id", id);
+//            PhotoAlbum photoAlbum = photoAlbumMapper.selectOne(queryWrapper);
+//            photo_queryWrapper.eq("photo_id", photoAlbum.getPhotoId());
+//            Photo photo = photoMapper.selectOne(photo_queryWrapper);
+//            ans.add(photo);
+//            return ans;
+//        }
+    }
+
+    @Override
+    public List<Integer> getPhotoIdList(Map<String, String> data) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
@@ -86,22 +127,5 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
             idList.add(new_photo.getPhotoId());
         }
         return idList;
-//        List<PhotoAlbum> list = photoAlbumMapper.selectList(queryWrapper);
-////        System.out.println(list);
-//        List<Integer> idList = new ArrayList<>();
-//        for(PhotoAlbum photoAlbum:list){
-//            idList.add(photoAlbum.getAlbumId());
-//        }
-//        List<Photo> ans = new ArrayList<>();
-//        for(Integer id:idList){
-//            queryWrapper.clear();
-//            photo_queryWrapper.clear();
-//            queryWrapper.eq("album_id", id);
-//            PhotoAlbum photoAlbum = photoAlbumMapper.selectOne(queryWrapper);
-//            photo_queryWrapper.eq("photo_id", photoAlbum.getPhotoId());
-//            Photo photo = photoMapper.selectOne(photo_queryWrapper);
-//            ans.add(photo);
-//            return ans;
-//        }
     }
 }

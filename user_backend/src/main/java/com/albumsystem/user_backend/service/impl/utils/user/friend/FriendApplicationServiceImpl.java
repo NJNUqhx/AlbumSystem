@@ -36,6 +36,7 @@ public class FriendApplicationServiceImpl implements FriendApplicationService {
         int recipientId = Integer.parseInt(data.get("recipient_id"));
         int applicantId = user.getUserId();
         Short status = 0;
+        String message = data.get("message");
 
         if (recipientId == applicantId){
             map.put("error_message","不可选择自己为好友");
@@ -52,7 +53,14 @@ public class FriendApplicationServiceImpl implements FriendApplicationService {
             return map;
         }
 
-        FriendApplication friendApplication = new FriendApplication(null,applicantId,recipientId,status);
+        if(message.length()>128){
+            map.put("error_message","描述信息长度过长");
+            return map;
+        }
+        else if (message.length()==0){
+            message = "null";
+        }
+        FriendApplication friendApplication = new FriendApplication(null,applicantId,recipientId, message, status);
 
         friendApplicationMapper.insert(friendApplication);
         map.put("error_message","success");
@@ -68,20 +76,26 @@ public class FriendApplicationServiceImpl implements FriendApplicationService {
         User user = loginUser.getUser();
 
         Map<String, String> map = new HashMap<>();
-
-        int applicantId = Integer.parseInt(data.get("applicant_id"));
-        int recipientId = user.getUserId();
+        QueryWrapper<FriendApplication> friendApplicationQueryWrapper = new QueryWrapper<>();
+        int Id = Integer.parseInt(data.get("id"));
         Short status = Short.parseShort(data.get("status"));
-        FriendApplication friendApplication = new FriendApplication(null,applicantId,recipientId,status);
-        friendApplicationMapper.updateById(friendApplication);
+        FriendApplication friendApplication = friendApplicationMapper.selectById(Id);
+        FriendApplication new_friendApplication = new FriendApplication(
+                friendApplication.getId(),
+                friendApplication.getApplicantId(),
+                friendApplication.getRecipientId(),
+                friendApplication.getMessage(),
+                status
+        );
+        friendApplicationMapper.updateById(new_friendApplication);
 
         if(status == 1){//同意
-            int userId1 = Math.min(applicantId,recipientId);
-            int userId2 = Math.max(applicantId,recipientId);
+            int userId1 = Math.min(friendApplication.getApplicantId(),friendApplication.getRecipientId());
+            int userId2 = Math.max(friendApplication.getApplicantId(),friendApplication.getRecipientId());
             Friend friend = new Friend(userId1,userId2);
             QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("user1_id",userId1).eq("user2_id",userId2);
-            System.out.println(friendMapper.exists(queryWrapper));
+            //System.out.println(friendMapper.exists(queryWrapper));
             if(!friendMapper.exists(queryWrapper)) friendMapper.insert(friend);
         }
 

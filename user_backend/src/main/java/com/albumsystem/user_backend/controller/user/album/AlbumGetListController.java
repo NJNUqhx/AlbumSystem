@@ -25,6 +25,9 @@ public class AlbumGetListController {
     public Album getAlbum(@RequestParam Map<String, String> data ){ return albumGetListService.getAlbum(data); }
 
     @PostMapping("/user/album/getPhotoList/")
-    public List<Integer> getPhotoList(@RequestParam Map<String, String> data ){ return albumGetListService.getPhotoList(data); }
+    public List<Photo> getPhotoList(@RequestParam Map<String, String> data ){ return albumGetListService.getPhotoList(data); }
+
+    @PostMapping("/user/album/getPhotoIdList/")
+    public List<Integer> getPhotoIdList(@RequestParam Map<String, String> data ){ return albumGetListService.getPhotoIdList(data); }
 
 }

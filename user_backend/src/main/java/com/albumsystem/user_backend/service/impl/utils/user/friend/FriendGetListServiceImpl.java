@@ -60,6 +60,29 @@ public class FriendGetListServiceImpl implements FriendGetListService {
         return allFriend;
     }
 
+//    @Override
+//    public List<User> search(Map<String, String> data) {
+//
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+//        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+//        //User user = loginUser.getUser();
+//
+//        String nickname = data.get("nickname");
+//        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.like("nickname",nickname);
+//        List<User> allFriend = getList();
+//        List<User> likeList = userMapper.selectList(queryWrapper);
+//
+//        List<User> result = new ArrayList();
+//        for (User user : allFriend) {
+//            if (!likeList.contains(user)) {
+//                result.add(user);
+//            }
+//        }
+//
+//        return result;
+//    }
     @Override
     public List<User> search(Map<String, String> data) {
 
@@ -69,19 +92,15 @@ public class FriendGetListServiceImpl implements FriendGetListService {
         //User user = loginUser.getUser();
 
         String nickname = data.get("nickname");
+        String account = data.get("account");
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("nickname",nickname);
-        List<User> allFriend = getList();
-        List<User> likeList = userMapper.selectList(queryWrapper);
-
-        List<User> result = new ArrayList();
-        for (User user : allFriend) {
-            if (likeList.contains(user)) {
-                result.add(user);
-            }
+        if(nickname.length() > 0)
+        {
+            queryWrapper.like("nickname",nickname);
+        }else{
+            queryWrapper.like("account",account);
         }
-
-        return result;
+        return userMapper.selectList(queryWrapper);
     }
 
     @Override
