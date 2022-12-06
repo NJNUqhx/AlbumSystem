@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/account/token/", "/user/account/register/").permitAll()//公开的链接
+                .antMatchers("/user/account/token/", "/user/account/register/", "/user/photo/upload/", "/user/photo/upload/backend/").permitAll()//公开的链接
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
                 //.and().csrf().disable();//关闭CSRF保护即可。

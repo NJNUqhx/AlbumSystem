@@ -9,12 +9,18 @@ import MyAlbumView from '../views/MyAlbumView'
 import MyPhotoView from '../views/MyPhotoView'
 import AlbumView from '../views/AlbumView'
 import MomentView from '../views/MomentView'
+import UploadPhoto from '../views/UploadPhoto'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/user/photo/upload/',
+    name: 'uploadphoto',
+    component: UploadPhoto
   },
   {
     path: '/404/',
