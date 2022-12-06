@@ -30,10 +30,7 @@ public class PhotoUpdateServiceImpl implements PhotoUpdateService {
         int photoId = Integer.parseInt(data.get("photo_id"));
         Short authority = Short.parseShort(data.get("authority"));
         String name = data.get("name");
-        String address = data.get("address");
-        /*
-        判断是否正确......(代码)
-         */
+
         Map<String, String> map = new HashMap<>();
         Photo photo = photoMapper.selectById(photoId);
 
@@ -43,10 +40,6 @@ public class PhotoUpdateServiceImpl implements PhotoUpdateService {
         }
         if (photo == null) {
             map.put("error_message","用户不存在或已被删除");
-            return map;
-        }
-        if(address == null || address.length()==0){
-            map.put("error_message","地址不能为空！");
             return map;
         }
         if(authority!=0&&authority!=1&&authority!=2){
@@ -60,8 +53,8 @@ public class PhotoUpdateServiceImpl implements PhotoUpdateService {
                 name,
                 authority,
                 new Date(),
-                null,
-                address
+                photo.getStatus(),
+                photo.getAddress()
         );
 
         photoMapper.updateById(new_photo);
