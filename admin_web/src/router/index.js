@@ -94,8 +94,8 @@ router.beforeEach((to, from, next) => {
       success() {
       },
       error() {
-        alert("token无效,请重新登录!");
-        router.push({ name: 'login' });
+        // alert("token无效,请重新登录!");
+        // router.push({ name: 'login' });
       }
     })
   } 

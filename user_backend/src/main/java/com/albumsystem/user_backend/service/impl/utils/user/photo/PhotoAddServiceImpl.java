@@ -32,7 +32,7 @@ public class PhotoAddServiceImpl implements PhotoAddService {
         Map<String, String> map = new HashMap<>();
 
         String name = data.get("name");
-        String address = data.get("address");
+        String address = "D:\\Github\\AlbumSystem\\images\\temp\\temp.jpg";
         Short authority = Short.parseShort(data.get("authority"));
         Short status = 0;
 
@@ -53,6 +53,10 @@ public class PhotoAddServiceImpl implements PhotoAddService {
         int length = address.length();
         String endIndex = address.substring(length-4,length);
         System.out.println(endIndex);
+        File folder = new File("D:\\Github\\AlbumSystem\\images\\" + user.getUserId());
+        if(!folder.exists()){
+            folder.mkdirs();
+        }
         String new_address = "D:\\Github\\AlbumSystem\\images\\" + user.getUserId() + '\\' + photo.getPhotoId() + endIndex;// + ".jpg";
         System.out.println(new_address);
 
