@@ -5,6 +5,10 @@
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
+            <router-link :class="route_name == 'manageuser' ? 'nav-link active' : 'nav-link'"
+              :to="{ name: 'manageuser' }">用户管理</router-link>
+          </li>
+          <li class="nav-item">
             <router-link :class="route_name == 'examinephoto' ? 'nav-link active' : 'nav-link'"
               :to="{ name: 'examinephoto' }">审核照片</router-link>
           </li>

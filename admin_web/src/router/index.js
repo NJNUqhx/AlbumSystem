@@ -8,6 +8,7 @@ import HandleMoment from '../views/HandleMoment'
 import HandleComment from '../views/HandleComment'
 import LoginView from '../views/LoginView'
 import RegisterView from '../views/RegisterView'
+import ManageUser from '../views/ManageUser'
 import store from '../store/index'
 
 const routes = [
@@ -15,6 +16,14 @@ const routes = [
     path: "/",
     name: "home",
     component: AdminHome,
+    meta: {
+      requestAuth: true,
+    }
+  },
+  {
+    path: "/manage/user/",
+    name: "manageuser",
+    component: ManageUser,
     meta: {
       requestAuth: true,
     }

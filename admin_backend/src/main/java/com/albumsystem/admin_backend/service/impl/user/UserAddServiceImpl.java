@@ -62,7 +62,6 @@ public class UserAddServiceImpl implements UserAddService {
         map.put("nickname",updateUser.getNickname());
         map.put("password",password);
 
-        map.put("error_message", "success");
 
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginAdmin = (UserDetailsImpl) authentication.getPrincipal();
