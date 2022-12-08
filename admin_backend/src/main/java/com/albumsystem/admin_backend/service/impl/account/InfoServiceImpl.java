@@ -1,11 +1,9 @@
-package com.albumsystem.admin_backend.service.impl;
+package com.albumsystem.admin_backend.service.impl.account;
 
 import com.albumsystem.admin_backend.pojo.Admin;
-import com.albumsystem.admin_backend.service.InfoService;
+import com.albumsystem.admin_backend.service.account.InfoService;
 import com.albumsystem.admin_backend.service.impl.utils.UserDetailsImpl;
-import com.albumsystem.admin_backend.utils.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

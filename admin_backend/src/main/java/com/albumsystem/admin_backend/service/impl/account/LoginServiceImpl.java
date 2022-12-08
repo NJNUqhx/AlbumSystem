@@ -1,7 +1,7 @@
-package com.albumsystem.admin_backend.service.impl;
+package com.albumsystem.admin_backend.service.impl.account;
 
 import com.albumsystem.admin_backend.pojo.Admin;
-import com.albumsystem.admin_backend.service.LoginService;
+import com.albumsystem.admin_backend.service.account.LoginService;
 import com.albumsystem.admin_backend.service.impl.utils.UserDetailsImpl;
 import com.albumsystem.admin_backend.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;

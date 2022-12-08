@@ -1,8 +1,8 @@
-package com.albumsystem.admin_backend.service.impl;
+package com.albumsystem.admin_backend.service.impl.account;
 
 import com.albumsystem.admin_backend.mapper.AdminMapper;
 import com.albumsystem.admin_backend.pojo.Admin;
-import com.albumsystem.admin_backend.service.RegisterService;
+import com.albumsystem.admin_backend.service.account.RegisterService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

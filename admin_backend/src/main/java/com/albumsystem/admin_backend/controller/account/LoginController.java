@@ -1,6 +1,6 @@
-package com.albumsystem.admin_backend.controller.admin;
+package com.albumsystem.admin_backend.controller.account;
 
-import com.albumsystem.admin_backend.service.LoginService;
+import com.albumsystem.admin_backend.service.account.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
