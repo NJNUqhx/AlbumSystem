@@ -153,6 +153,49 @@ create table comment_to_moment
             on update cascade on delete cascade
 );
 
+create table moment_examine_result
+(
+    id        int auto_increment
+        primary key,
+    moment_id int          not null,
+    user_id   int          not null,
+    result    varchar(128) null,
+    advice    varchar(128) null,
+    admin_id  int          not null,
+    time      datetime     null,
+    constraint id
+        unique (id),
+    constraint moment_examine_result_admin_admin_id_fk
+        foreign key (admin_id) references admin (admin_id)
+            on update cascade on delete cascade,
+    constraint moment_examine_result_moment_moment_id_fk
+        foreign key (moment_id) references moment (moment_id)
+            on update cascade on delete cascade,
+    constraint moment_examine_result_user_user_id_fk
+        foreign key (user_id) references user (user_id)
+            on update cascade on delete cascade
+);
+
+create table moment_handle_result
+(
+    id        int auto_increment
+        primary key,
+    moment_id int          not null,
+    user_id   int          not null,
+    result    varchar(128) null,
+    advice    varchar(128) null,
+    admin_id  int          not null,
+    time      datetime     null,
+    constraint id
+        unique (id),
+    constraint moment_handle_result_admin_admin_id_fk
+        foreign key (admin_id) references admin (admin_id),
+    constraint moment_handle_result_moment_moment_id_fk
+        foreign key (moment_id) references moment (moment_id),
+    constraint moment_handle_result_user_user_id_fk
+        foreign key (user_id) references user (user_id)
+);
+
 create table moment_report
 (
     report_id int auto_increment
@@ -231,5 +274,18 @@ create table photo_to_moment
     constraint photo_to_moment_photo_photo_id_fk
         foreign key (photo_id) references photo (photo_id)
             on update cascade on delete cascade
+);
+
+create table user_management_result
+(
+    id       int auto_increment
+        primary key,
+    admin_id int         not null,
+    message  varchar(64) null,
+    time     datetime    null,
+    constraint id
+        unique (id),
+    constraint user_management_result_admin_admin_id_fk
+        foreign key (admin_id) references admin (admin_id)
 );
 

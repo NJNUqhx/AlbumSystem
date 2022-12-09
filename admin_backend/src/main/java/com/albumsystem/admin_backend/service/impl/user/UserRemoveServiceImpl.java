@@ -26,6 +26,10 @@ public class UserRemoveServiceImpl implements UserRemoveService {
 
     @Override
     public Map<String, String> userRemove(Map<String, String> map) {
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginAdmin = (UserDetailsImpl) authentication.getPrincipal();
+        Admin admin = loginAdmin.getAdmin();
+
         Integer userId = Integer.valueOf(map.get("userId"));
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("user_id", userId);
@@ -33,18 +37,19 @@ public class UserRemoveServiceImpl implements UserRemoveService {
             map.put("error_message","不存在该用户");
             return map;
         }
-        userMapper.deleteById(userId);
-        map.put("error_message", "success");
 
         User user = userMapper.selectOne(userQueryWrapper);
 
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl loginAdmin = (UserDetailsImpl) authentication.getPrincipal();
-        Admin admin = loginAdmin.getAdmin();
         Date date = new Date();
         String message = "管理员" + admin.getAccount() + "删除用户" + user.getAccount();
         UserManagementResult userManagementResult = new UserManagementResult(null, admin.getAdminId(), message,date);
         userManagementResultMapper.insert(userManagementResult);
+
+        userMapper.deleteById(userId);
+        map.put("error_message", "success");
+
+
+
 
         return map;
     }

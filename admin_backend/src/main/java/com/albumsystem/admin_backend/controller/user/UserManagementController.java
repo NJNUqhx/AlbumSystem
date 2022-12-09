@@ -13,8 +13,9 @@ public class UserManagementController {
     @Autowired
     private UserManagementResultService userManagementResultService;
 
-    @PostMapping("/admin/user/management/result")
+    @PostMapping("/admin/user/management/result/")
     public List<UserManagementResult> UserManagementResult(){
+
         return userManagementResultService.UserManagementResultList();
     }
 }

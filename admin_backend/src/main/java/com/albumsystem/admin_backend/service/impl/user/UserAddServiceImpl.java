@@ -33,10 +33,23 @@ public class UserAddServiceImpl implements UserAddService {
 
     @Override
     public Map<String, String> userAdd(Map<String,String> data) {
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginAdmin = (UserDetailsImpl) authentication.getPrincipal();
+        Admin admin = loginAdmin.getAdmin();
+
         Map<String, String> map = new HashMap<>();
 
         String password = data.get("password");
         String nickname = data.get("nickname");
+
+        if(nickname == null){
+            map.put("error_message", "用户昵称不能为空");
+            return map;
+        }
+        if(password == null){
+            map.put("error_message","用户密码不能为空");
+            return map;
+        }
 
         String encodedPassword = passwordEncoder.encode(password);
 
@@ -44,7 +57,7 @@ public class UserAddServiceImpl implements UserAddService {
         queryWrapper.eq("nickname", nickname);
         List<User> users = userMapper.selectList(queryWrapper);
         if (!users.isEmpty()) {
-            map.put("error_message", "用户名已存在");
+            map.put("error_message", "用户昵称已存在");
             return map;
         }
 
@@ -54,6 +67,11 @@ public class UserAddServiceImpl implements UserAddService {
         queryWrapper.clear();
         queryWrapper.eq("nickname",nickname);
         User updateUser = userMapper.selectOne(queryWrapper);
+        if(updateUser == null)
+        {
+            map.put("error_message", "查询用户状态出错");
+            return map;
+        }
         updateUser.setAccount();
         userMapper.updateById(updateUser);
         map.put("error_message", "success");
@@ -62,10 +80,9 @@ public class UserAddServiceImpl implements UserAddService {
         map.put("nickname",updateUser.getNickname());
         map.put("password",password);
 
+        System.out.println(updateUser);
 
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl loginAdmin = (UserDetailsImpl) authentication.getPrincipal();
-        Admin admin = loginAdmin.getAdmin();
+
         Date date = new Date();
         String message = "管理员" + admin.getAccount() + "添加用户" + updateUser.getAccount();
         UserManagementResult userManagementResult = new UserManagementResult(null, admin.getAdminId(), message,date);

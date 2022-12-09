@@ -15,6 +15,7 @@ public class UserAddController {
 
     @PostMapping("/admin/user/add/")
     public Map<String,String> userAdd(@RequestParam Map<String, String> map){
+        System.out.println(map);
         return userAddService.userAdd(map);
     }
 }
