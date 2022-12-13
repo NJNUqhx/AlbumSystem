@@ -18,7 +18,7 @@ public class CommentReport {
     private Integer commentId;
     private Integer userId;
     private String reason;
-    private Integer status;
+    private Short status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date time;
 }

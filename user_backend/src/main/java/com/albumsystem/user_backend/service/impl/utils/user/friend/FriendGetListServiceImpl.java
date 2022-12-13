@@ -110,14 +110,24 @@ public class FriendGetListServiceImpl implements FriendGetListService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = loginUser.getUser();
 
-        QueryWrapper<FriendApplication> queryWrapper1 = new QueryWrapper<>();
-        queryWrapper1.eq("applicant_id",user.getUserId());
+//        QueryWrapper<FriendApplication> queryWrapper1 = new QueryWrapper<>();
+//        queryWrapper1.eq("applicant_id",user.getUserId());
         QueryWrapper<FriendApplication> queryWrapper2 = new QueryWrapper<>();
         queryWrapper2.eq("recipient_id",user.getUserId());
 
-        List<FriendApplication> friendApplications = friendApplicationMapper.selectList(queryWrapper1);
-        friendApplications.addAll(friendApplicationMapper.selectList(queryWrapper2));
+        List<FriendApplication> friendApplications = friendApplicationMapper.selectList(queryWrapper2);
+//        friendApplications.addAll(friendApplicationMapper.selectList(queryWrapper2));
 
         return friendApplications;
+    }
+
+    @Override
+    public boolean isFriend(int userId, int friendId) {
+
+        int userId1 = Math.min(userId,friendId), userId2 = Math.max(userId,friendId);
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user1_id",userId1).eq("user2_id",userId2);
+        return friendMapper.exists(queryWrapper);
+
     }
 }

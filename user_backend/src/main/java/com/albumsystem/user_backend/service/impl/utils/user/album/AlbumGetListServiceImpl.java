@@ -1,12 +1,10 @@
 package com.albumsystem.user_backend.service.impl.utils.user.album;
 
 import com.albumsystem.user_backend.mapper.AlbumMapper;
+import com.albumsystem.user_backend.mapper.FriendMapper;
 import com.albumsystem.user_backend.mapper.PhoToAlbumMapper;
 import com.albumsystem.user_backend.mapper.PhotoMapper;
-import com.albumsystem.user_backend.pojo.Album;
-import com.albumsystem.user_backend.pojo.Photo;
-import com.albumsystem.user_backend.pojo.PhotoToAlbum;
-import com.albumsystem.user_backend.pojo.User;
+import com.albumsystem.user_backend.pojo.*;
 import com.albumsystem.user_backend.service.impl.utils.UserDetailsImpl;
 import com.albumsystem.user_backend.service.user.album.AlbumGetListService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -28,6 +26,8 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
     private PhoToAlbumMapper photoAlbumMapper;
     @Autowired
     private PhotoMapper photoMapper;
+    @Autowired
+    private FriendMapper friendMapper;
 
     @Override
     public List<Album> getList() {
@@ -127,5 +127,32 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
             idList.add(new_photo.getPhotoId());
         }
         return idList;
+    }
+
+    @Override
+    public List<Album> getUsersAlbum(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+        int userId = user.getUserId();
+
+        int friendId = Integer.parseInt(data.get("friend_id"));
+        QueryWrapper<Album> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",friendId);
+        List<Album> list = albumMapper.selectList(queryWrapper);
+
+        int userId1 = Math.min(userId,friendId), userId2 = Math.max(userId,friendId);
+        QueryWrapper<Friend> friendQueryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user1_id",userId1).eq("user2_id",userId2);
+        boolean isFriend = friendMapper.exists(friendQueryWrapper);
+
+        List<Album> ans = new ArrayList<>();
+        for(Album album:list)
+            if(album.getAuthority().equals(0) || (album.getAuthority().equals(1) && isFriend)){
+                //开放或对好友开放且为好友
+                ans.add(album);
+            }
+        return ans;
     }
 }

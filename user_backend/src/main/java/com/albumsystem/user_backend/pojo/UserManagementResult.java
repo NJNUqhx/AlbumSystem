@@ -12,14 +12,11 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Moment {
+public class UserManagementResult {
     @TableId(type = IdType.AUTO)
-    private Integer momentId;
-    private Integer userId;
-    private Short authority;
-    private String description;
-    private Integer star;
+    private Integer id;
+    private Integer adminId;
+    private String message;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
-    private Integer status;
 }

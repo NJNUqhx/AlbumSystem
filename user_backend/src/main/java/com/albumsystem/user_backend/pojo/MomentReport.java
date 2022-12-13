@@ -10,16 +10,15 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Moment {
+@AllArgsConstructor
+public class MomentReport {
     @TableId(type = IdType.AUTO)
     private Integer momentId;
+    private Integer reportId;
     private Integer userId;
-    private Short authority;
-    private String description;
-    private Integer star;
+    private String reason;
+    private Short status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
-    private Integer status;
 }

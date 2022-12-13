@@ -10,4 +10,5 @@ public interface FriendGetListService {
     public List<User> getList();
     public List<User> search(Map<String,String> data);
     public List<FriendApplication> getApplicationList();
+    public boolean isFriend(int userId, int friendId);
 }

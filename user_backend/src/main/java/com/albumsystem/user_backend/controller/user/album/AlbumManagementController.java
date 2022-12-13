@@ -23,4 +23,6 @@ public class AlbumManagementController {
     public Map<String,String> deletePhoto(@RequestParam Map<String,String> data){
         return albumManagementService.deletePhoto(data);
     }
+
+
 }

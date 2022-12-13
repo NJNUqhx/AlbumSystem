@@ -19,4 +19,13 @@ public class CommentAddController {
         return commentAddService.addToAlbum(data);
     }
 
+    @PostMapping("/user/comment/addToMoment/")
+    public Map<String,String> addToMoment(@RequestParam Map<String,String> data){
+        return commentAddService.addToMoment(data);
+    }
+
+//    @PostMapping("/user/comment/addReport/")
+//    public Map<String,String> addReport(@RequestParam Map<String,String> data){
+//        return commentAddService.addReport(data);
+//    }
 }
