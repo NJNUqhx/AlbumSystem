@@ -149,7 +149,7 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
 
         List<Album> ans = new ArrayList<>();
         for(Album album:list)
-            if(album.getAuthority().equals(0) || (album.getAuthority().equals(1) && isFriend)){
+            if(album.getAuthority() == 0 || (album.getAuthority() == 1 && isFriend)){
                 //开放或对好友开放且为好友
                 ans.add(album);
             }

@@ -41,7 +41,7 @@ public class CommentGetListServiceImpl implements CommentGetListService {
         for (CommentToAlbum commentToAlbum:commentToAlbumList){
             int commentId = commentToAlbum.getCommentId();
             Comment comment = commentMapper.selectById(commentId);
-            if (comment.getCommentId().equals(1)){//被审核过的方可见
+            if (comment.getStatus() == 1){//被审核过的方可见
                 ans.add(comment);
             }
         }
@@ -63,7 +63,7 @@ public class CommentGetListServiceImpl implements CommentGetListService {
         for (CommentToMoment commentToMoment:commentToMomentList){
             int commentId = commentToMoment.getCommentId();
             Comment comment = commentMapper.selectById(commentId);
-            if (comment.getStatus().equals(1)){//被审核过的方可见
+            if (comment.getStatus() == 1){//被审核过的方可见
                 ans.add(comment);
             }
         }

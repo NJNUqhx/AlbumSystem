@@ -34,7 +34,7 @@ public class MomentHandleServiceImpl implements MomentHandleService {
 
         int momentId = Integer.parseInt(data.get("moment_id"));
         String reason = data.get("reason");
-        Short status = Short.parseShort(data.get("status"));
+        Short status = 0;
         Date now = new Date();
 
         Map<String, String> map = new HashMap<>();
@@ -47,7 +47,7 @@ public class MomentHandleServiceImpl implements MomentHandleService {
         QueryWrapper<Moment> queryWrapper_m = new QueryWrapper<>();
         queryWrapper_m.eq("moment_id",momentId);
         Moment moment = momentMapper.selectOne(queryWrapper_m);
-        int userId = moment.getUserId();
+        int userId = user.getUserId();
 
         MomentReport momentReport = new MomentReport(null,momentId, userId,reason,status,now);
         momentReportMapper.insert(momentReport);
@@ -65,7 +65,7 @@ public class MomentHandleServiceImpl implements MomentHandleService {
         Map<String, String> map = new HashMap<>();
         int momentId = Integer.parseInt(data.get("moment_id"));
         Moment moment = momentMapper.selectById(momentId);
-        int userId = moment.getUserId();
+        int userId = user.getUserId();
         Short authority = moment.getAuthority();
         String description = moment.getDescription();
         int star = moment.getStar()+1;

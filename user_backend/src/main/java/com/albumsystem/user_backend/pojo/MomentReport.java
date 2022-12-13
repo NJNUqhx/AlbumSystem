@@ -14,8 +14,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class MomentReport {
     @TableId(type = IdType.AUTO)
-    private Integer momentId;
     private Integer reportId;
+    private Integer momentId;
     private Integer userId;
     private String reason;
     private Short status;

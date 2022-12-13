@@ -63,9 +63,9 @@ public class MomentGetListServiceImpl implements MomentGetListService {
             queryWrapper_c.clear();
             queryWrapper_c.eq("comment_id",commentToMoment.getCommentId());
             Comment new_comment = commentMapper.selectOne(queryWrapper_c);
+            if(new_comment.getStatus() == 0) continue;//未审核，跳过
             commentList.add(new_comment);
         }
-
         return commentList;
     }
 
@@ -88,11 +88,14 @@ public class MomentGetListServiceImpl implements MomentGetListService {
         boolean isFriend = friendMapper.exists(friendQueryWrapper);
 
         List<Moment> ans = new ArrayList<>();
-        for(Moment moment:list)
-            if(moment.getAuthority().equals(0) || (moment.getAuthority().equals(1) && isFriend)){
+        for(Moment moment:list) {
+            if (moment.getStatus() == 0) continue;//未审核的跳过
+            if (moment.getAuthority() == 0 || (moment.getAuthority() == 1 && isFriend)) {
                 //开放或对好友开放且为好友
                 ans.add(moment);
+                System.out.println(moment);
             }
+        }
         return ans;
     }
 }
