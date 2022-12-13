@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="comment in commentList" :key="comment.id">
+                <tr v-for="comment in commentList" :key="comment.commentId">
                     <td>
                         <!-- <p>{{comment["report_time"]}}</p> -->
                         <ul class="list-group">

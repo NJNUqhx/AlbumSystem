@@ -17,20 +17,20 @@ public class MomentListController {
     @Autowired
     private MomentListService momentListService;
 
-    @PostMapping("/admin/moment/list/")
+    @PostMapping("/admin/moment/list/all/")
     public List<Moment> momentList(){
         return momentListService.momentList();
     }
 
     @PostMapping("/admin/moment/comment/")
     public List<Comment> commentsOfMoment(@RequestParam Map<String, String> map){
-        Integer momentId = Integer.valueOf(map.get("moment_id"));
+        Integer momentId = Integer.valueOf(map.get("momentId"));
         return momentListService.commentsOfMoment(momentId);
     }
 
     @PostMapping("/admin/moment/photo/")
     public List<Photo> photosOfMoment(@RequestParam Map<String, String> map){
-        Integer momentId = Integer.valueOf(map.get("moment_id"));
+        Integer momentId = Integer.valueOf(map.get("momentId"));
         return momentListService.photosOfMoment(momentId);
     }
 }

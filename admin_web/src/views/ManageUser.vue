@@ -89,10 +89,102 @@
                     <td>
                         <div class="btn-group-vertical">
                             <button class="btn btn-success" @click="removeUser(user)">删除用户</button>
-                            <button class="btn btn-danger">查看照片</button>
-                            
-                            <button class="btn btn-info">查看动态</button>
-                            <button class="btn btn-primary">查看评论</button>
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#photos-user-btn"
+                                @click="getPhotosOfUser(user)">用户照片</button>
+                            <div class="modal fade" id="photos-user-btn" tabindex="-1">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">查看用户照片</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <th style="width: 30%;"><span>用户照片</span></th>
+                                                <th style="width: 70%"><span>照片信息</span></th>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="photo in photos" :key="photo.photoId">
+                                                    <td>
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <img :src="require('D:/GitHub/AlbumSystem/images/' + photo.userId + '/' + photo.photoId + '.jpg')"
+                                                                    class="img-fluid img-thumbnail" alt="用户照片">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item"><b>用户编号:</b> {{ photo.userId }}</li>
+                                                        <li class="list-group-item"><b>照片编号:</b> {{ photo.photoId }}
+                                                        </li>
+                                                        <li class="list-group-item"><b>照片名称:</b> {{ photo.name }}</li>
+                                                        <li class="list-group-item"><b>上传时间:</b> {{ photo.time }}</li>
+                                                        <li class="list-group-item"><b>访问权限:</b> {{
+                                                                showPhotoAuthority(photo.authority)
+                                                        }}</li>
+                                                        <li class="list-group-item"><b>审核状态:</b> {{
+                                                                showPhotoStatus(photo.status)
+                                                        }}</li>
+                                                        <li class="list-group-item"><b>存储地址:</b> {{ photo.address }}
+                                                        </li>
+                                                    </ul>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">退出</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-info" data-bs-toggle="modal"
+                                data-bs-target="#comments-user-btn" @click="getCommentsOfUser(user)">用户评论</button>
+                            <div class="modal fade" id="comments-user-btn" tabindex="-1">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">查看用户评论</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <th>评论信息</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="comment in comments" :key="comment.commentId">
+                                                    <td>
+                                                        <!-- <p>{{comment["report_time"]}}</p> -->
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item"><b>评论编号:</b>{{
+                                                                    comment["commentId"]
+                                                            }}</li>
+                                                            <li class="list-group-item"><b>用户编号:</b>{{ comment["userId"]
+                                                            }}</li>
+                                                            <li class="list-group-item"><b>评论内容:</b>{{
+                                                                    comment["content"]
+                                                            }}</li>
+                                                            <li class="list-group-item"><b>评论时间:</b>{{
+                                                                    comment["comment_time"]
+                                                            }}</li>
+                                                            <li class="list-group-item"><b>评论状态:</b> {{
+                                                                    show_comment_status(comment["comment_status"])
+                                                            }}</li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">退出</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -204,14 +296,91 @@ export default {
             })
         }
 
+        let photos = ref([]);
+        let comments = ref([]);
+        const getPhotosOfUser = (user) => {
+            $.ajax({
+                url: "http://127.0.0.1:3000/admin/user/photo/list/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                data: {
+                    userId: user.userId
+                },
+                success(resp) {
+                    photos.value = resp;
+                },
+                error() {
+                    alert("error");
+                }
+            })
+        }
+
+        const getCommentsOfUser = (user) => {
+            $.ajax({
+                url: "http://127.0.0.1:3000/admin/user/comment/list/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                data: {
+                    userId: user.userId
+                },
+                success(resp) {
+                    comments.value = resp;
+                },
+                error() {
+                    alert("error");
+                }
+            })
+        }
+
+        const showPhotoStatus = (status) => {
+            if (String(status) === "0")
+                return "待审核";
+            else if (String(status) === "1")
+                return "审核通过";
+            else if (String(status) === "2")
+                return "审核失败";
+            else
+                return "状态出错";
+        }
+        const showPhotoAuthority = (authority) => {
+            if (String(authority) === "0")
+                return "所有人可见";
+            else if (String(authority) === "1")
+                return "仅好友可见";
+            else if (String(authority) === "2")
+                return "仅自己可见";
+            else
+                return "状态出错";
+        }
+
+        const show_comment_status = (status) =>{
+            if(status === "0")
+                return "默认状态";
+            else if(status === "1")
+                return "举报成功->删除";
+            else
+                return "举报失败->保留";
+        }
+
         return {
             users,
             add_user,
             results,
+            photos,
+            comments,
             getUserList,
             addUser,
             removeUser,
-            getUserManagementResultList
+            getUserManagementResultList,
+            getPhotosOfUser,
+            getCommentsOfUser,
+            showPhotoAuthority,
+            showPhotoStatus,
+            show_comment_status
         }
     }
 }
@@ -236,8 +405,7 @@ div.error-message {
     color: red;
 }
 
-#user-photo{
+#user-photo {
     height: 125px;
 }
-
 </style>

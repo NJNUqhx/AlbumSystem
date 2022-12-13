@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="photo in photos" :key="photo.id">
+                <tr v-for="photo in photos" :key="photo.photoId">
                     <td>
                         <div class="card">
                             <div class="card-body">

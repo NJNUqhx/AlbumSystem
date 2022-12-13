@@ -1,16 +1,20 @@
 <template>
-    <ContentField>
-        HandleMoment
-    </ContentField>
+    <div class="container">
+        <table class="table table-hover table-bordered">
+            <thead>
+                
+            </thead>
+        </table>
+    </div>
 </template>
 
 <script>
-import ContentField from '../components/ContentField'
+
 
 export default{
     name: "HandleMoment",
     components:{
-        ContentField
+        
     }
 }
 </script>
