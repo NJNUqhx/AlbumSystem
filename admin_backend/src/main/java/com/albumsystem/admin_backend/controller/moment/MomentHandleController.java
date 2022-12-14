@@ -13,7 +13,7 @@ public class MomentHandleController {
     @Autowired
     private MomentReportHandleService momentReportHandleService;
 
-    @PostMapping("/admin/moment/handle")
+    @PostMapping("/admin/moment/handle/")
     public Map<String, String> momentReportHandle(@RequestParam Map<String,String> map){
         return momentReportHandleService.momentReportHandle(map);
     }

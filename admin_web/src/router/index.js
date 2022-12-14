@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AdminHome from '../views/AdminHome'
+//import AdminHome from '../views/AdminHome'
 import NotFound from '../views/NotFound'
 import ExaminePhoto from '../views/ExaminePhoto'
 import ExamineMoment from '../views/ExamineMoment'
@@ -15,7 +15,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: AdminHome,
+    component: ManageUser,
     meta: {
       requestAuth: true,
     }

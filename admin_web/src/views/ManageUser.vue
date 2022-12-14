@@ -168,7 +168,7 @@
                                                                     comment["content"]
                                                             }}</li>
                                                             <li class="list-group-item"><b>评论时间:</b>{{
-                                                                    comment["comment_time"]
+                                                                    comment["time"]
                                                             }}</li>
                                                             <li class="list-group-item"><b>评论状态:</b> {{
                                                                     show_comment_status(comment["comment_status"])

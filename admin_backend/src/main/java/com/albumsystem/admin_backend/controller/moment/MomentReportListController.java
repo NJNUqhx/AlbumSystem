@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MomentReportListController {
@@ -17,4 +18,10 @@ public class MomentReportListController {
     public List<MomentReport> momentReportList(){
         return momentReportListService.momentReportList();
     }
+
+    @PostMapping("/admin/moment/report/all/")
+    public List<Map<String,String>> momentAndReportList(){
+        return momentReportListService.momentAndReportList();
+    }
+
 }

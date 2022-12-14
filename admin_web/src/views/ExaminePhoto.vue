@@ -120,7 +120,7 @@ export default {
                 }
             })
             $(target).val("");
-            getPhotoListAll();
+            window.location.reload();
         }
         getPhotoListAll();
         return {

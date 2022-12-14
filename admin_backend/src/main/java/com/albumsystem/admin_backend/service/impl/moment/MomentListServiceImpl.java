@@ -48,6 +48,7 @@ public class MomentListServiceImpl implements MomentListService {
         queryWrapper.eq("moment_id", momentId);
         // 获取所有的映射关系
         List<CommentToMoment> commentToMomentList = commentToMomentMapper.selectList(queryWrapper);
+        if(commentToMomentList.isEmpty()) return null;
         // 获取所有评论编号
         List<Integer> commentIdList = new ArrayList<>();
         for ( CommentToMoment elem: commentToMomentList) {
@@ -61,16 +62,18 @@ public class MomentListServiceImpl implements MomentListService {
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginAdmin = (UserDetailsImpl) authentication.getPrincipal();
         Admin admin = loginAdmin.getAdmin();
-        
         QueryWrapper<PhotoToMoment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("moment_id", momentId);
         // 获取所有的映射关系
         List<PhotoToMoment> photoToMomentList = photoToMomentMapper.selectList(queryWrapper);
+        if(photoToMomentList.isEmpty()) return null;
+        System.out.println(photoToMomentList);
         // 获取所有照片编号
         List<Integer> photoIdList = new ArrayList<>();
         for ( PhotoToMoment elem: photoToMomentList) {
             photoIdList.add(elem.getPhotoId());
         }
+        System.out.println(photoIdList);
         return photoMapper.selectBatchIds(photoIdList);
     }
 }

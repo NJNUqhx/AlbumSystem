@@ -45,12 +45,17 @@ public class MomentReportHandleServiceImpl implements MomentReportHandleService 
         String advice = map.get("advice");
 
         QueryWrapper<MomentReport> momentReportQueryWrapper = new QueryWrapper<>();
+        momentReportQueryWrapper.eq("report_id", reportId);
         if(!momentReportMapper.exists(momentReportQueryWrapper)){
             stringMap.put("error_message","未查询到该动态举报");
             return stringMap;
         }
-
+        System.out.print(map);
         MomentReport momentReport = momentReportMapper.selectOne(momentReportQueryWrapper);
+        if(momentReport == null){
+            stringMap.put("error_message","未查询到该动态举报");
+            return stringMap;
+        }
         if(momentReport.getStatus().equals(handle)){
             stringMap.put("error_message","处理状态未改变");
             return stringMap;
@@ -85,6 +90,7 @@ public class MomentReportHandleServiceImpl implements MomentReportHandleService 
             result = "撤销处理";
             momentHandleResult = new MomentHandleResult(null,momentId,userId,result,advice,admin.getAdminId(),time);
         }
+        momentMapper.updateById(moment);
         momentHandleResultMapper.insert(momentHandleResult);
 
         stringMap.put("error_message", "success");

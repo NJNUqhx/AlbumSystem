@@ -53,6 +53,7 @@ public class MomentExamineServiceImpl implements MomentExamineService {
         }
         
         moment.setStatus(examination);
+        momentMapper.updateById(moment);
         Date time = new Date();
         MomentExamineResult momentExamineResult;
         if(examination.equals(1)) {
