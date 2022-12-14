@@ -31,7 +31,7 @@ public class CommentHandleResultServiceImpl implements CommentHandleResultServic
 
         QueryWrapper<CommentHandleResult> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",user.getUserId());
-        System.out.println(user.getUserId());
+        //System.out.println(user.getUserId());
 
         List<CommentHandleResult> commentHandleResultList = commentHandleResultMapper.selectList(queryWrapper);
         return commentHandleResultList;

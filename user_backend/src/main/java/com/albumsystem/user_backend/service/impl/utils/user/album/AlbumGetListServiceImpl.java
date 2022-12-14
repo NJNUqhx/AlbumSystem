@@ -28,6 +28,8 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
     private PhotoMapper photoMapper;
     @Autowired
     private FriendMapper friendMapper;
+    @Autowired
+    private PhoToAlbumMapper phoToAlbumMapper;
 
     @Override
     public List<Album> getList() {
@@ -154,5 +156,28 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
                 ans.add(album);
             }
         return ans;
+    }
+
+    @Override
+    public List<Photo> getUsersPhoto(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        int albumId = Integer.parseInt(data.get("album_id"));
+        QueryWrapper<PhotoToAlbum> photoToAlbumQueryWrapper = new QueryWrapper<>();
+        photoToAlbumQueryWrapper.eq("album_id",albumId);
+        List<PhotoToAlbum> photoToAlbumList = phoToAlbumMapper.selectList(photoToAlbumQueryWrapper);
+        List<Photo> photoList = new ArrayList<>();
+
+        for(PhotoToAlbum photoToAlbum: photoToAlbumList){
+            int photoId = photoToAlbum.getPhotoId();
+            Photo photo = photoMapper.selectById(photoId);
+            if(photo.getStatus() == 0) continue;//未审核
+            //System.out.println(photo.getStatus());
+            photoList.add(photo);
+        }
+        return photoList;
     }
 }

@@ -2,6 +2,8 @@ package com.albumsystem.user_backend.controller.user.moment;
 
 import com.albumsystem.user_backend.pojo.Comment;
 import com.albumsystem.user_backend.pojo.Moment;
+import com.albumsystem.user_backend.pojo.MomentExamineResult;
+import com.albumsystem.user_backend.pojo.MomentHandleResult;
 import com.albumsystem.user_backend.service.user.moment.MomentGetListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +32,15 @@ public class MomentGetListController {
     @PostMapping("/user/moment/getUsersMomentList/")
     public List<Moment> getUsersMomentList(@RequestParam Map<String,String> data){
         return momentGetListService.getUsersList(data);
+    }
+
+    @PostMapping("/user/moment/getExamineResult/")
+    public List<MomentExamineResult> getMomentExamineResult(){
+        return momentGetListService.getMomentExamineResultList();
+    }
+
+    @PostMapping("/user/moment/getHandleResult/")
+    public List<MomentHandleResult> getMomentHandleResult(){
+        return momentGetListService.getMomentHandleResultList();
     }
 }

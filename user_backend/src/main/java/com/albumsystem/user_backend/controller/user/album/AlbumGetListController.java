@@ -34,4 +34,9 @@ public class AlbumGetListController {
     public List<Album> getUsersList(@RequestParam Map<String, String> data){
         return albumGetListService.getUsersAlbum(data);
     }
+
+    @PostMapping("/user/album/getUsersPhotoList/")
+    public List<Photo> getUsersPhotoList(@RequestParam Map<String,String> data){
+        return albumGetListService.getUsersPhoto(data);
+    }
 }

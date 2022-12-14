@@ -13,4 +13,5 @@ public interface AlbumGetListService {
     public List<Photo> getPhotoList(Map<String, String> data);
     public List<Integer> getPhotoIdList(Map<String, String> data);
     List<Album> getUsersAlbum(Map<String, String> data);
+    List<Photo> getUsersPhoto(Map<String,String> data);
 }

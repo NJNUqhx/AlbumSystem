@@ -1,9 +1,6 @@
 package com.albumsystem.user_backend.service.impl.utils.user.moment;
 
-import com.albumsystem.user_backend.mapper.CommentMapper;
-import com.albumsystem.user_backend.mapper.CommentToMomentMapper;
-import com.albumsystem.user_backend.mapper.FriendMapper;
-import com.albumsystem.user_backend.mapper.MomentMapper;
+import com.albumsystem.user_backend.mapper.*;
 import com.albumsystem.user_backend.pojo.*;
 import com.albumsystem.user_backend.service.impl.utils.UserDetailsImpl;
 import com.albumsystem.user_backend.service.user.moment.MomentGetListService;
@@ -30,6 +27,10 @@ public class MomentGetListServiceImpl implements MomentGetListService {
     private CommentToMomentMapper commentToMomentMapper;
     @Autowired
     private FriendMapper friendMapper;
+    @Autowired
+    private MomentExamineResultMapper momentExamineResultMapper;
+    @Autowired
+    private MomentHandleResultMapper momentHandleResultMapper;
 
     @Override
     public List<Moment> getList() {
@@ -97,5 +98,33 @@ public class MomentGetListServiceImpl implements MomentGetListService {
             }
         }
         return ans;
+    }
+
+    @Override
+    public List<MomentExamineResult> getMomentExamineResultList() {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<MomentExamineResult> momentExamineResultQueryWrapper = new QueryWrapper<>();
+        momentExamineResultQueryWrapper.eq("user_id",user.getUserId());
+
+        List<MomentExamineResult> momentExamineResultList = momentExamineResultMapper.selectList(momentExamineResultQueryWrapper);
+        return momentExamineResultList;
+    }
+
+    @Override
+    public List<MomentHandleResult> getMomentHandleResultList() {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<MomentHandleResult> momentHandleResultQueryWrapper = new QueryWrapper<>();
+        momentHandleResultQueryWrapper.eq("user_id",user.getUserId());
+
+        List<MomentHandleResult> momentHandleResultList = momentHandleResultMapper.selectList(momentHandleResultQueryWrapper);
+        return momentHandleResultList;
     }
 }

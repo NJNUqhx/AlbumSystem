@@ -15,7 +15,7 @@ public class PhotoExamineController {
     @Autowired
     private PhotoExamineResultService photoExamineResultService;
 
-    @PostMapping("/user/photo/examineResult/")
+    @PostMapping("/user/photo/getExamineResult/")
     public List<PhotoExamineResult> photoExamine(){
         return photoExamineResultService.photoExamine();
     }
