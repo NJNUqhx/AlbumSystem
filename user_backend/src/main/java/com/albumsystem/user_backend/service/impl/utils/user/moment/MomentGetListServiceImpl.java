@@ -159,6 +159,17 @@ public class MomentGetListServiceImpl implements MomentGetListService {
     }
 
     @Override
+    public int getPhotoId(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        Photo photo = getPhoto(data);
+        return photo.getPhotoId();
+    }
+
+    @Override
     public List<MomentExamineResult> getMomentExamineResultList() {
         UsernamePasswordAuthenticationToken authenticationToken =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();

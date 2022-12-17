@@ -26,7 +26,7 @@ public class CommentGetListController {
         return commentGetListService.commentGetListMoment(data);
     }
 
-    @PostMapping("/user/comment/getCommentUserName/")
+    @PostMapping("/user/comment/getCommentUserName/")//返回用户名字
     public String getUsername(@RequestParam Map<String,String> data){
         return commentGetListService.getUsername(data);
     }
