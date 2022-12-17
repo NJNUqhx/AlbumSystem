@@ -3,6 +3,7 @@ package com.albumsystem.user_backend.service.impl.utils.user.comment;
 import com.albumsystem.user_backend.mapper.CommentMapper;
 import com.albumsystem.user_backend.mapper.CommentToAlbumMapper;
 import com.albumsystem.user_backend.mapper.CommentToMomentMapper;
+import com.albumsystem.user_backend.mapper.UserMapper;
 import com.albumsystem.user_backend.pojo.*;
 import com.albumsystem.user_backend.service.impl.utils.UserDetailsImpl;
 import com.albumsystem.user_backend.service.user.comment.CommentGetListService;
@@ -21,6 +22,8 @@ public class CommentGetListServiceImpl implements CommentGetListService {
 
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     private CommentToAlbumMapper commentToAlbumMapper;
     @Autowired
@@ -68,5 +71,24 @@ public class CommentGetListServiceImpl implements CommentGetListService {
             }
         }
         return ans;
+    }
+
+    @Override
+    public String getUsername(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+
+        int commentId = Integer.parseInt(data.get("comment_id"));
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
+        commentQueryWrapper.eq("comment_id",commentId);
+        Comment comment = commentMapper.selectOne(commentQueryWrapper);
+
+        int userId = comment.getUserId();
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("user_id",userId);
+        User user = userMapper.selectOne(userQueryWrapper);
+
+        return user.getNickname();
     }
 }

@@ -25,4 +25,9 @@ public class CommentGetListController {
     public List<Comment> getListMoment(@RequestParam Map<String,String> data){
         return commentGetListService.commentGetListMoment(data);
     }
+
+    @PostMapping("/user/comment/getCommentUserName/")
+    public String getUsername(@RequestParam Map<String,String> data){
+        return commentGetListService.getUsername(data);
+    }
 }

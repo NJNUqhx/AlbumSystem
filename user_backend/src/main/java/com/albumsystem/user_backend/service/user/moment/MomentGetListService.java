@@ -9,6 +9,9 @@ public interface MomentGetListService {
     List<Moment> getList();
     List<Comment> getCommentList(Map<String, String> data);
     public List<Moment> getUsersList(Map<String, String> data);
+    Photo getPhoto(Map<String,String> data);
+    Moment getMoment(Map<String,String> data);
+    String getUsername(Map<String,String> data);
 
     List<MomentExamineResult> getMomentExamineResultList();
     List<MomentHandleResult> getMomentHandleResultList();

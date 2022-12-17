@@ -24,6 +24,8 @@ public class MomentGetListServiceImpl implements MomentGetListService {
     @Autowired
     private CommentMapper commentMapper;
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
     private CommentToMomentMapper commentToMomentMapper;
     @Autowired
     private FriendMapper friendMapper;
@@ -31,6 +33,10 @@ public class MomentGetListServiceImpl implements MomentGetListService {
     private MomentExamineResultMapper momentExamineResultMapper;
     @Autowired
     private MomentHandleResultMapper momentHandleResultMapper;
+    @Autowired
+    private PhotoToMomentMapper photoToMomentMapper;
+    @Autowired
+    private PhotoMapper photoMapper;
 
     @Override
     public List<Moment> getList() {
@@ -64,7 +70,7 @@ public class MomentGetListServiceImpl implements MomentGetListService {
             queryWrapper_c.clear();
             queryWrapper_c.eq("comment_id",commentToMoment.getCommentId());
             Comment new_comment = commentMapper.selectOne(queryWrapper_c);
-            if(new_comment.getStatus() == 0) continue;//未审核，跳过
+            if(new_comment.getStatus() != 1) continue;//未审核或着审核不通过，跳过
             commentList.add(new_comment);
         }
         return commentList;
@@ -90,7 +96,7 @@ public class MomentGetListServiceImpl implements MomentGetListService {
 
         List<Moment> ans = new ArrayList<>();
         for(Moment moment:list) {
-            if (moment.getStatus() == 0) continue;//未审核的跳过
+            if (moment.getStatus() != 1) continue;//未审核或者审核不通过的的跳过
             if (moment.getAuthority() == 0 || (moment.getAuthority() == 1 && isFriend)) {
                 //开放或对好友开放且为好友
                 ans.add(moment);
@@ -98,6 +104,58 @@ public class MomentGetListServiceImpl implements MomentGetListService {
             }
         }
         return ans;
+    }
+
+    @Override
+    public Photo getPhoto(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        int momentId = Integer.parseInt(data.get("moment_id"));
+        QueryWrapper<PhotoToMoment> photoToMomentQueryWrapper = new QueryWrapper<>();
+        photoToMomentQueryWrapper.eq("moment_id",momentId);
+
+        PhotoToMoment photoToMoment = photoToMomentMapper.selectOne(photoToMomentQueryWrapper);
+        int photoId = photoToMoment.getPhotoId();
+        Photo photo = photoMapper.selectById(photoId);
+
+        return photo;
+    }
+
+    @Override
+    public Moment getMoment(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        //User user = loginUser.getUser();
+
+        int momentId = Integer.parseInt(data.get("moment_id"));
+        QueryWrapper<Moment> momentQueryWrapper = new QueryWrapper<>();
+        momentQueryWrapper.eq("moment_id",momentId);
+        Moment moment = momentMapper.selectOne(momentQueryWrapper);
+
+        return moment;
+    }
+
+    @Override
+    public String getUsername(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+
+        int momentId = Integer.parseInt(data.get("moment_id"));
+        QueryWrapper<Moment> momentQueryWrapper = new QueryWrapper<>();
+        momentQueryWrapper.eq("moment_id",momentId);
+        Moment moment = momentMapper.selectOne(momentQueryWrapper);
+
+        int userId = moment.getUserId();
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("user_id",userId);
+        User user = userMapper.selectOne(userQueryWrapper);
+
+        return user.getNickname();
     }
 
     @Override

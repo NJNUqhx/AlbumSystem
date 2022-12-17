@@ -1,9 +1,6 @@
-package com.albumsystem.user_backend.controller.user.moment;
+ package com.albumsystem.user_backend.controller.user.moment;
 
-import com.albumsystem.user_backend.pojo.Comment;
-import com.albumsystem.user_backend.pojo.Moment;
-import com.albumsystem.user_backend.pojo.MomentExamineResult;
-import com.albumsystem.user_backend.pojo.MomentHandleResult;
+import com.albumsystem.user_backend.pojo.*;
 import com.albumsystem.user_backend.service.user.moment.MomentGetListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +31,16 @@ public class MomentGetListController {
         return momentGetListService.getUsersList(data);
     }
 
+    @PostMapping("/user/moment/getMoment/")
+    public Moment getMoment(@RequestParam Map<String,String> data){
+        return momentGetListService.getMoment(data);
+    }
+
+    @PostMapping("/user/moment/getPhoto/")
+    public Photo getPhoto(@RequestParam Map<String,String> data){
+        return momentGetListService.getPhoto(data);
+    }
+
     @PostMapping("/user/moment/getExamineResult/")
     public List<MomentExamineResult> getMomentExamineResult(){
         return momentGetListService.getMomentExamineResultList();
@@ -42,5 +49,10 @@ public class MomentGetListController {
     @PostMapping("/user/moment/getHandleResult/")
     public List<MomentHandleResult> getMomentHandleResult(){
         return momentGetListService.getMomentHandleResultList();
+    }
+
+    @PostMapping("/user/moment/getMomentUserName/")
+    public String getUserName(@RequestParam Map<String,String> data){
+        return momentGetListService.getUsername(data);
     }
 }
