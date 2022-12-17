@@ -174,7 +174,7 @@ public class AlbumGetListServiceImpl implements AlbumGetListService {
         for(PhotoToAlbum photoToAlbum: photoToAlbumList){
             int photoId = photoToAlbum.getPhotoId();
             Photo photo = photoMapper.selectById(photoId);
-            if(photo.getStatus() == 0) continue;//未审核
+            if(photo.getStatus() != 1) continue;//未审核或审核不通过
             //System.out.println(photo.getStatus());
             photoList.add(photo);
         }
