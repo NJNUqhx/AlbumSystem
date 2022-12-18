@@ -10,42 +10,66 @@ import MyPhotoView from '../views/MyPhotoView'
 import AlbumView from '../views/AlbumView'
 import MomentView from '../views/MomentView'
 import UploadPhoto from '../views/UploadPhoto'
+import store from '../store/index'
+import UserMomentView from '../views/UserMomentView'
+import UserPhotoView from '../views/UserPhotoView'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/user/photo/upload/',
     name: 'uploadphoto',
-    component: UploadPhoto
+    component: UploadPhoto,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/404/',
     name: '404',
-    component: NotFoundView
+    component: NotFoundView,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/userlist/',
     name: 'userlist',
-    component: UserListView
+    component: UserListView,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/userprofile/:userid',
     name: 'userprofile',
-    component: UserProfileView
+    component: UserProfileView,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/user/account/login/',
     name: 'login',
-    component: LoginView
+    component: LoginView,
+    meta: {
+      requestAuth: false,
+    }
   },
   {
     path: '/user/account/register/',
     name: 'register',
-    component: RegisterView
+    component: RegisterView,
+    meta: {
+      requestAuth: false,
+    }
   },
   {
     path: '/:catchAll(.*)/',
@@ -54,23 +78,51 @@ const routes = [
   {
     path: '/myalbum/',
     name: 'myalbum',
-    component: MyAlbumView
+    component: MyAlbumView,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/myphoto/',
     name: 'myphoto',
-    component: MyPhotoView
+    component: MyPhotoView,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/myalbum/:album_id',
     name: 'myalbum_1',
     component: AlbumView,
-    props: true
+    props: true,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/moments/',
     name: 'moments',
-    component: MomentView
+    component: MomentView,
+    meta: {
+      requestAuth: true,
+    }
+  },
+  {
+    path: '/user/photos/',
+    name: 'user_photos',
+    component: UserPhotoView,
+    meta: {
+      requestAuth: true,
+    }
+  },
+  {
+    path: '/user/moments/',
+    name: 'user_moments',
+    component: UserMomentView,
+    meta: {
+      requestAuth: true,
+    }
   },
   {
     path: '/about/',
@@ -85,6 +137,33 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+/* router.beforeEach((to, from, next) => {
+  const jwt_token = localStorage.getItem("jwt_token");
+    if (jwt_token) {
+    store.commit("updateToken", jwt_token);
+    store.dispatch("getinfo", {
+      success() {
+      },
+      error() {
+        alert("token无效,请重新登录!");
+        router.push({ name: 'login' });
+      }
+    })
+  } 
+  if (!jwt_token && !store.state.user.is_login) {
+    next({ name: "login" });
+  } else {
+    next();
+  }
+}) */
+router.beforeEach((to, from, next) => {
+  if (to.meta.requestAuth && !store.state.user.is_login) {
+    next({name: "login"});
+  } else {
+    next();
+  }
 })
 
 export default router

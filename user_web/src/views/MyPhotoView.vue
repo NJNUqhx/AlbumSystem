@@ -7,9 +7,9 @@
         <div class="card">
           <h5 class="card-header">当前位置：</h5>
             <div class="card-body">
-              <table class="album-table" :key="componentKey">
-                <tr v-for="photo in photos" :key= "photo.photoId">
-                <td>
+              <div class="album-table" :key="componentKey">
+                <ul style="display: flex;flex-wrap: wrap;">
+                <li style="	padding: 5px;list-style: none;margin-right: 15px;" v-for="photo in photos" :key= "photo.photoId">
                   <img class="file-img" :src="require('D:/GitHub/AlbumSystem/images/' + photo.userId + '/' + photo.photoId + '.jpg')" />
                   <div class="file-name">{{photo.name}}</div>
                   <div class="btn-group">
@@ -23,7 +23,6 @@
                       <li><a class="dropdown-item" href="#" @click="delete_photo(photo)">删除照片</a></li>
                     </ul>
                   </div>
-                </td>
 
                 <!--显示照片-->
                 <div class="modal fade" :id="('showPhoto' + photo.photoId)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -71,6 +70,7 @@
                           <label for="exampleFormControlInput1" class="form-label">权限</label>
                           <input v-model="photo.status" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Album name">
                         </div> -->
+                        <label for="exampleFormControlInput1" class="form-label">权限</label>
                         <select v-model="photo.authority" class="form-select" aria-label="Default select example">
                           <option value="0">所有人可见</option>
                           <option value="1">仅好友可见</option>
@@ -85,10 +85,12 @@
                     </div>
                   </div>
                 </div>
-                </tr>
-              </table>
+
+
+                  </li>
+                </ul>
+              </div>
               <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadPhoto">上传照片</a>
-          
             </div>
         </div>
       </div>
@@ -105,15 +107,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <el-upload class="upload-demo" action="http://localhost:3000/user/photo/upload/backend/" :on-success="onSuccess"
-        accept=".jpg" :limit="1" :headers="token">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div class="el-upload__tip">只能上传jpg/png文件,且不超过10MB</div>
-          </el-upload>
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">照片名</label>
             <input v-model="new_photo.name" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Album name">
           </div>
+          <label for="exampleFormControlInput1" class="form-label">上传照片</label>
+          <el-upload class="upload-demo" action="http://localhost:3000/user/photo/upload/backend/" :on-success="onSuccess"
+        accept=".jpg" :limit="1" :headers="token">
+            <el-button size="small" type="primary" style="float:left">点击上传</el-button>
+            <div class="el-upload__tip" style="float:left; margin-left: 10px;">只能上传jpg/png文件,且不超过10MB</div>
+          </el-upload>
 
 <!--           <div class="mb-3">
             <label for="formFileMultiple" id="add-photo" class="form-label">选择照片</label>
@@ -350,6 +353,7 @@
 
   .card {
     margin-top: 20px;
+    background-color: rgba(255,255,255,0.5);
   }
   
   .album-table {
@@ -369,7 +373,7 @@
 .file-name {
   margin-top: 5px;
   margin-left: 35px;
-  /* height: 44px; */
+  /* height: 44px;  */
   margin-bottom: 5px;
   line-height: 22px;
   font-size: 15px;

@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="card">
-      <div class="body">
+<!--     <div class="card">
+      <div class="body"> -->
         <img class="file-img" src='~@/assets/folder3.png' @click="album_display" />
 <!--         <div class="file-name">
           <slot></slot>
         </div> -->
         <div class="file-name">{{album.name}}</div>
-      </div>
-    </div>
+<!--       </div>
+    </div> -->
   </div>
 </template>
   
@@ -46,8 +46,8 @@ export default {
 }
 
 .file-img {
-  width: 200px;
-  height: 200px;
+  width: 170px;
+  height: 170px;
   text-align: center;
   cursor: pointer;
 }

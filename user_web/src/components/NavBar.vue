@@ -37,7 +37,7 @@
 
       <ul class="navbar-nav" v-else>       
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" @click="(getAllApplicaitons(),refresh_photos())">
             消息
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -45,11 +45,11 @@
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#report-list">举报信息</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#report-list">审核信息</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#photo-list">审核信息</a></li>
           </ul>
         </li>
 
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" >
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{ $store.state.user.nickname }}
           </a>
@@ -58,11 +58,12 @@
                 <router-link class="dropdown-item" :to="{name: 'userprofile', params:{userid:1}}">我的动态</router-link>
             </li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" @click="logout">退出</a></li>
+            <li><a class="dropdown-item" href="#" @click="logout()">退出</a></li>
           </ul>
         </li>
 
       </ul>
+
       <!--friend-request-->
       <div class="modal fade" id="friend-request" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -72,7 +73,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <div class="mb-3">
+                  <div class="mb-3" v-for="apl in applications" :key="apl.id">
                     <div class="card">
                       <dic class="card-body">
                         <div class="row">
@@ -80,14 +81,24 @@
                                 <img class="img-fluid" src="https://cdn.acwing.com/media/user/profile/photo/142492_lg_7c84a89707.jpg" alt="">
                             </div>
                             <div class="col-3">
-                              <div class="friend-request-name">Zilong Xue</div>
+                              <div class="friend-request-name">{{apl.applicantId}}</div>
                             </div>
                             <div class="col-5">
-                              <div class="friend-request">交个朋友吧~</div>
+                              <div class="friend-request">{{apl.message}}</div>
                             </div>
-                            <div class="col-3">
-                              <div class="btn btn-dark">同意</div>
-                              <div class="btn btn-light">拒绝</div>
+                            <!--暂时无法判断自己的userId-->
+                            <div class="col-3" v-if="(apl.applicantId == $store.state.user.userId)">
+                              <div class="request-result">等待对方处理</div>
+                            </div>
+                            <div class="col-3" v-else-if="(apl.status == 0)">
+                              <div class="btn btn-dark" @click="handleApplicaitons(apl.id, 1)">同意</div>
+                              <div class="btn btn-light" @click="handleApplicaitons(apl.id, 0)">拒绝</div>
+                            </div>
+                            <div class="col-3" v-else-if="(apl.status == 1)">
+                              <div class="request-result">已通过</div>
+                            </div>
+                            <div class="col-3" v-else-if="(apl.status == 2)">
+                              <div class="request-result">拒绝</div>
                             </div>
                         </div>
                       </dic>
@@ -120,6 +131,50 @@
         </div>
       </div>
 
+       <!--审核信息-->
+       <div class="modal fade" id="photo-list" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">审核信息</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3" v-for="photo in photos" :key="photo.photoId">
+                    <div class="card">
+                      <dic class="card-body">
+                        <div class="row">
+                            <div class="col-3">
+                              <img class="img-report" style="width: 120px; height: 120px" :src="require('D:/GitHub/AlbumSystem/images/' + photo.userId + '/' + photo.photoId + '.jpg')" alt="">
+                            </div>
+                            <div class="col-3">
+                              <div class="friend-request-name">{{photo.name}}</div>
+                            </div>
+                            <div class="col-3">
+                              <div class="friend-request">{{photo.time}}</div>
+                            </div>
+                            <div class="col-3" v-if="(photo.status == 0)">
+                              <div class="photo-result">未审核</div>
+                            </div>
+                            <div class="col-3" v-else-if="(photo.status == 1)">
+                              <div class="photo-result">审核通过</div>
+                            </div>
+                            <div class="col-3" v-else-if="(photo.status == 2)">
+                              <div class="photo-result">审核失败</div>
+                            </div>
+                        </div>
+                      </dic>
+                    </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">确认</button>
+            </div>
+            </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </nav>
@@ -127,17 +182,93 @@
 
 <script>
 import {useStore} from 'vuex';
+import $ from 'jquery'
+import { ref } from 'vue'
+//import { Modal } from 'bootstrap/dist/js/bootstrap'
 
   export default {
     name: "NavBar",
+    /* props: {
+      applications:{
+        required: true,
+      }
+    }, */
     setup() {
       const store = useStore();
+      const jwt_token = localStorage.getItem("jwt_token");
+      let applications = ref([]);
+      let photos = ref([]);
+
       const logout = () => {
-        store.commit('logout');
+        //console.log("navbar:" + jwt_token);
+        store.dispatch('logout');
       };
 
+      console.log('id:'+store.state.user.is_login);
+      
+      const getAllApplicaitons = () =>{
+            $.ajax({
+                url: "http://127.0.0.1:3000/user/friend/getApplicationList/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                success(resp) {
+                    console.log(resp);
+                    applications.value = resp;
+                },
+                error(resp) {
+                  console.log(resp);
+                }
+            })
+        }
+      //getAllApplicaitons();
+      const handleApplicaitons = (id, status) =>{
+            $.ajax({
+                url: "http://127.0.0.1:3000/user/friend/handleApplication/",
+                type: "post",
+                headers: {
+                    Authorization: "Bearer " + jwt_token,
+                },
+                data: {
+                  id: id,
+                  status: status,
+                },
+                success(resp) {
+                    console.log(resp);
+                    getAllApplicaitons();
+                },
+                error(resp) {
+                  console.log(resp);
+                }
+            })
+        }
+        const refresh_photos = () => {
+          $.ajax({
+            url: "http://127.0.0.1:3000/user/photo/getExamineResult/",
+            type: "post",
+            headers:{
+              Authorization: "Bearer " + jwt_token, 
+            },
+            success(resp) {
+              console.log(resp);
+              photos.value = resp;
+              //methods.forceRerender();
+              //photo_name = ' ';
+            },
+            error(resp) {
+              console.log(resp);
+            }      
+          });
+        }
+        
       return {
         logout,
+        getAllApplicaitons,
+        handleApplicaitons,
+        refresh_photos,
+        applications,
+        photos,
       }
     }
 }
@@ -149,10 +280,16 @@ import {useStore} from 'vuex';
   color: white;
 }
 
-img {
+.img-fluid {
   border-radius: 50%;
   margin-left: 5px;
 }
+
+/* img {
+  border-radius: 50%;
+  margin-left: 5px;
+} */
+
 
 .btn-dark {
   margin-right: 10px;
@@ -164,5 +301,9 @@ img {
 
 .friend-request {
   margin-top:8px;
+}
+
+.photo-result{
+  margin-top: 8px;
 }
 </style>

@@ -8,7 +8,7 @@ export default  {
         nickname: "",
         token: "",
         is_login: false,
-        pulling_info: true,
+        pulling_info: true, // 是否正在从云端拉取信息
     },
   
     //通过计算获取state中的数据
@@ -85,6 +85,7 @@ export default  {
         },
         logout(context) {
             localStorage.removeItem("jwt_token");
+            //console.log("jwt_token:" +  localStorage.getItem("jwt_token"));
             context.commit("logout");
         }
     },

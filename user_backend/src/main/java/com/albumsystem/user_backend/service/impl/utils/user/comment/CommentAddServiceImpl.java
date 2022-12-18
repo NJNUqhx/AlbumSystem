@@ -49,7 +49,7 @@ public class CommentAddServiceImpl implements CommentAddService {
         else if ( content.length() > 128){
             map.put("error_message","评论过长！");
             return map;
-        }
+    }
 
         Comment comment = new Comment(null,user.getUserId(),content,now,status);
         commentMapper.insert(comment);

@@ -6,15 +6,15 @@
       操作
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#showPhoto" >显示信息</a></li>
+      <li><a class="dropdown-item" href="#" data-bs-toggle="modal" :data-bs-target="('#showPhoto' + photo.photoId)" >显示信息</a></li>
       <!-- <li><a class="dropdown-item" href="#">下载照片</a></li> -->
       <!-- <li><a class="dropdown-item" href="#" @click="update_photo()">编辑照片</a></li> -->
-      <li><a class="dropdown-item" href="#">删除照片</a></li>
+      <li><a class="dropdown-item" href="#" @click="delete_photo()">删除照片</a></li>
     </ul>
   </div>
 
     <!-- Modal -->
-  <div class="modal fade" id="showPhoto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" :id="('showPhoto' + photo.photoId)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -47,6 +47,7 @@
 
 <script>
 import $ from 'jquery'
+//import { emit } from 'process';
 //import { ref } from 'vue'
 
 export default {
@@ -56,8 +57,15 @@ export default {
                 type: Object,
                 required: true,
             },
+            album_id: {
+                required: true,
+            }
         },
- 
+  methods:{
+      update_album(){
+        this.$emit("refresh_photos");
+      }
+  },
   data(){
     return{
       photo_info: this.photo,
@@ -117,7 +125,31 @@ export default {
 
             }
         })
+    }
 
+    const delete_photo = () => {
+        $.ajax({
+            url: "http://127.0.0.1:3000/user/album/deletePhoto/",
+            type: "post",
+            headers: {
+                Authorization: "Bearer " + jwt_token,
+            },
+            data: {
+                photo_id: props.photo.photoId,
+                album_id: props.album_id,
+            },
+            success(resp) {
+                if (resp.error_message !== "success") {
+                    alert(resp.error_message)
+                }
+                //emit('refresh_photos()');
+                //methods.update_album();
+
+            },
+            error() {
+
+            }
+        })
     }
     const showAuthority = (authority) => {
         if (String(authority) === "0")
@@ -144,6 +176,7 @@ export default {
         showAuthority,
         update_photo,
         showStatus,
+        delete_photo,
         //photo_info,
       }
   }

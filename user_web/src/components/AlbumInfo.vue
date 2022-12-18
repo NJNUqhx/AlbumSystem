@@ -15,7 +15,8 @@
             </div>
         </div>
     </div>
-
+  
+  
   <!-- 相册信息编辑 -->
   <div class="modal fade" id="editAlbum" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

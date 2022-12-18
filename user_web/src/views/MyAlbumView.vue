@@ -7,19 +7,19 @@
         <div class="card">
           <h5 class="card-header">当前位置：</h5>
             <div class="card-body">
-              <table class="album-table" :key="componentKey">
+              <div class="album-table" :key="componentKey">
                 <!--列举相册-->
-                
-                <tr v-for="album in albums" :key= "album.albumId">
-                <td><AlbumItem :album="album"></AlbumItem></td>
-                </tr>
-               
+                <ul style="display: flex;flex-wrap: wrap;">
+                  <li style="	padding: 5px;list-style: none;margin-right: 60px;" v-for="album in albums" :key= "album.albumId">
+                    <AlbumItem :album="album"></AlbumItem>
+                  </li>
+                </ul>
               <!--   <tr>
                 <td><AlbumItem>相册1</AlbumItem></td>
                 <td><AlbumItem>相册2</AlbumItem></td>
                 <td><AlbumItem>相册3</AlbumItem></td>
                 </tr> -->
-            </table>
+            </div>
               <a href="#" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#createAlbum">新建相册</a>
             </div>
         </div>
@@ -173,6 +173,7 @@
   <style scoped>
   .card {
     margin-top: 20px;
+    background-color: rgba(255,255,255,0.5);
   }
   .album-table {
     margin-bottom: 150px;

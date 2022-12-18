@@ -10,13 +10,13 @@
         <div class="card">
           <h5 class="card-header">当前位置: {{album_info.name}}</h5>
           <div class="card-body">
-            <table class="album-table">
-              <tr v-for="photo in photos" :key= "photo.photoId">
-                <td>
-                  <PhotoItem :photo="photo"></PhotoItem>
-                </td>
-              </tr>
-            </table>
+            <div class="album-table">
+              <ul style="display: flex;flex-wrap: wrap;">
+                <li style="	padding: 5px;list-style: none;margin-right: 20px;" v-for="photo in photos" :key= "photo.photoId">
+                  <PhotoItem :photo="photo" :album_id="album_id"></PhotoItem>
+                </li>
+              </ul>
+            </div>
             <div class="btn-group">
               <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -31,7 +31,7 @@
         </div>
         <!-- comments传参 -->
         <!-- <CommentTable :comments="comments"></CommentTable> -->
-        <CommentTable></CommentTable>
+        <CommentTable :comments="comments" :album_id="album_id" ></CommentTable>
       </div>
     </div>
   </div>
@@ -110,7 +110,7 @@ export default {
     let album_info = ref([]);
     let photos = ref([]);
     let photo_list = ref([]);
-    //let comments = ref([]);
+    let comments = ref([]);
 
     const jwt_token = localStorage.getItem("jwt_token");
 /*     const new_photo = reactive({
@@ -215,7 +215,7 @@ export default {
     //获取评论信息
     const get_comments = () => {
         $.ajax({
-          url: "http://127.0.0.1:3000/user/photo/getList/",
+          url: "http://127.0.0.1:3000/user/comment/getListAlbum/",
           type: "post",
           headers:{
             Authorization: "Bearer " + jwt_token, 
@@ -225,13 +225,15 @@ export default {
           },
           success(resp) {
             console.log(resp);
-            album_info.value = resp;
+            comments.value = resp;
           },
           error(resp) {
             console.log(resp);
           }      
         });
       }
+    get_comments();
+
     const add_photo = (photo_id) => {
       $.ajax({
         url: "http://127.0.0.1:3000/user/album/addPhoto/",
@@ -264,6 +266,7 @@ export default {
       add_photo,
       update_AlbumInfo,
       get_photolist,
+      comments,
       photo_list,
       photos,
       album_info,
