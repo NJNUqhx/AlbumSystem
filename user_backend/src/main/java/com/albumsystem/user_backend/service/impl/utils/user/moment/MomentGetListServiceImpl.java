@@ -170,6 +170,50 @@ public class MomentGetListServiceImpl implements MomentGetListService {
     }
 
     @Override
+    public List<Integer> getPhotoIdList() {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        List<Moment> momentList = getList();
+        //List<Photo> photoList = new ArrayList<>();
+        List<Integer> integerList = new ArrayList<>();
+        QueryWrapper<PhotoToMoment> photoToMomentQueryWrapper = new QueryWrapper<>();
+        for(Moment moment:momentList){
+            int momentId = moment.getMomentId();
+            photoToMomentQueryWrapper.clear();
+            photoToMomentQueryWrapper.eq("moment_id",momentId);
+            PhotoToMoment photoToMoment = photoToMomentMapper.selectOne(photoToMomentQueryWrapper);
+            int photoId = photoToMoment.getPhotoId();
+            integerList.add(photoId);
+        }
+        return integerList;
+    }
+
+    @Override
+    public List<Integer> getUsersPhotoIdList(Map<String, String> data) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+
+        List<Moment> momentList = getUsersList(data);
+        //List<Photo> photoList = new ArrayList<>();
+        List<Integer> integerList = new ArrayList<>();
+        QueryWrapper<PhotoToMoment> photoToMomentQueryWrapper = new QueryWrapper<>();
+        for(Moment moment:momentList){
+            int momentId = moment.getMomentId();
+            photoToMomentQueryWrapper.clear();
+            photoToMomentQueryWrapper.eq("moment_id",momentId);
+            PhotoToMoment photoToMoment = photoToMomentMapper.selectOne(photoToMomentQueryWrapper);
+            int photoId = photoToMoment.getPhotoId();
+            integerList.add(photoId);
+        }
+        return integerList;
+    }
+
+    @Override
     public List<MomentExamineResult> getMomentExamineResultList() {
         UsernamePasswordAuthenticationToken authenticationToken =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();

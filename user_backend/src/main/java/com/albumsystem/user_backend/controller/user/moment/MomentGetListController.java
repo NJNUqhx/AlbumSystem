@@ -46,6 +46,16 @@ public class MomentGetListController {
         return momentGetListService.getPhotoId(data);
     }
 
+    @PostMapping("/user/moment/getPhotoIdList")//访问自己的动态照片Id
+    public List<Integer> getPhotoIdList(){
+        return momentGetListService.getPhotoIdList();
+    }
+
+    @PostMapping("/user/moment/getUsersPhotoIdList")//访问他人照片Id
+    public List<Integer> getUsersPhotoIdList(@RequestParam Map<String,String> data){
+        return momentGetListService.getUsersPhotoIdList(data);
+    }
+
     @PostMapping("/user/moment/getExamineResult/")//返回审核结果
     public List<MomentExamineResult> getMomentExamineResult(){
         return momentGetListService.getMomentExamineResultList();

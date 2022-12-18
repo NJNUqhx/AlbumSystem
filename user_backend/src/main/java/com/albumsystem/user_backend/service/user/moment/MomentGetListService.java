@@ -13,6 +13,8 @@ public interface MomentGetListService {
     Moment getMoment(Map<String,String> data);
     String getUsername(Map<String,String> data);
     int getPhotoId(Map<String,String> data);
+    List<Integer> getPhotoIdList();
+    List<Integer> getUsersPhotoIdList(Map<String,String> data);
 
     List<MomentExamineResult> getMomentExamineResultList();
     List<MomentHandleResult> getMomentHandleResultList();
