@@ -158,68 +158,19 @@ export default {
                 }
             })
         }
-
         getAllFriends();
-
-        //用户的照片
-        let user_photos = ref([]);
 
         //访问用户相册
         const visitAlbum = (id) =>{
-            //console.log(id);
-            $.ajax({
-                url: "http://127.0.0.1:3000/user/friend/sendApplication/",
-                type: "post",
-                headers: {
-                    Authorization: "Bearer " + jwt_token,
-                },
-                data:{
-                    user_id: id,
-                },
-                success(resp) {
-                    console.log(resp);
-                    user_photos.value=resp;
-                    /*
-                      页面跳转 
-                     */
-                     router.push({ name: 'user_photos', query: {photos: user_photos}});
-                },
-                error() {
-                    /* console.log(id);
-                    console.log(message); */
-                }
-            })
-          }
+          //跳转到用户相册
+          router.push({ name: 'user_photos', params:{user_id: id}});
+        }
         
-        //用户动态
-        let user_moments = ref([]);
         //访问用户动态
         const visitMoment = (id) =>{
-            //console.log(id);
-            $.ajax({
-                url: "http://127.0.0.1:3000/user/friend/sendApplication/",
-                type: "post",
-                headers: {
-                    Authorization: "Bearer " + jwt_token,
-                },
-                data:{
-                    user_id: id,
-                },
-                success(resp) {
-                    console.log(resp);
-                    user_photos.value=resp;
-                    /*
-                      页面跳转
-                     */  
-                    router.push({ name: 'user_moments', query: {moments: user_moments}});
-
-                },
-                error() {
-                  /* router.push({ name: 'user_moments', query: {moments: user_moments}}); */
-                }
-            })
-          }
-
+          //跳转到用户动态
+          router.push({ name: 'user_moments', params:{user_id: id}});  
+        }
 
         return {
             users,

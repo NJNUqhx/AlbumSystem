@@ -13,6 +13,7 @@ import UploadPhoto from '../views/UploadPhoto'
 import store from '../store/index'
 import UserMomentView from '../views/UserMomentView'
 import UserPhotoView from '../views/UserPhotoView'
+import MyMomentView from '../views/MyMomentView'
 
 const routes = [
   {
@@ -109,16 +110,26 @@ const routes = [
     }
   },
   {
-    path: '/user/photos/',
+    path: '/mymoments/',
+    name: 'mymoments',
+    component: MyMomentView,
+    meta: {
+      requestAuth: true,
+    }
+  },
+  {
+    path: '/user/photos/:user_id',
     name: 'user_photos',
+    props: true,
     component: UserPhotoView,
     meta: {
       requestAuth: true,
     }
   },
   {
-    path: '/user/moments/',
+    path: '/user/moments/:user_id',
     name: 'user_moments',
+    props: true,
     component: UserMomentView,
     meta: {
       requestAuth: true,

@@ -9,18 +9,19 @@
                 <img id="head-img" class="img-fluid" src="https://cdn.acwing.com/media/user/profile/photo/142492_lg_7c84a89707.jpg" alt="">
               </div>
               <div class="col-9">
-                <div class="username">{{user.username}}</div>
-                <div  class="fans">点赞: {{user.followers}}</div>
+                <div class="username">{{user_name}}</div>
+                <div  class="fans">账号: {{account}}</div>
               </div>
             </div>
           </div> 
         </div>
+        <!-- <a id="new-moment" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMoment">发表动态</a> -->
           <!-- <UserProfileWrite @posting="posting"></UserProfileWrite> -->
       </div>
       <div class="col-9">
-        <div id="moment-card" class="card" v-for="moment in moments" :key= "moment.momentId">
+        <div id="moment-card" class="card" v-for="(moment,index) in moments" :key= "moment.momentId">
         <div class="card-body">
-          <MomentItem :moment="moment"></MomentItem>
+          <MomentItem :moment="moment" :photo="photo_ids[index]" @get_moments="get_moments"></MomentItem>
         </div>
         </div>
       </div>
@@ -31,59 +32,37 @@
 
 <script>
 import ContentBase from '../components/ContentBase'
-//import UserProfileInfo from '../components/UserProfileInfo'
-//import UserProfilePost from '../components/UserProfilePost'
-//import UserProfileWrite from '../components/UserProfileWrite'
 import MomentItem from '@/components/MomentItem'
-import {reactive} from 'vue'
-import {useRoute} from 'vue-router'
+//import {reactive} from 'vue'
+//import {useRoute} from 'vue-router'
+import { useStore } from 'vuex';
 import { ref } from 'vue'
 import $ from 'jquery'
 //import { Modal } from 'bootstrap/dist/js/bootstrap'
 
 
 export default {
-    name: 'MomentView',
-    components: {
-    ContentBase,
-    //UserProfileInfo,
-    //UserProfilePost,
-    //UserProfileWrite,
-    MomentItem
-},
-    setup() {
+      name: 'UserMomentView',
+      components: {
+      ContentBase,
+      MomentItem
+    },
+    props: {
+      user_id: {
+            type: String,
+            required: true,
+        },
+    },
+    setup(props) {
         //?好像有问题，课程2 27：44
+        const store = useStore();
+        let user_name = store.state.user.nickname;
+        let account = store.state.user.account;
+
         const jwt_token = localStorage.getItem("jwt_token");
-        //let moment_photo_id = ref('');
+        let moments = ref([]);
         let photo_list = ref([]);
 
-        //获取路由moments参数
-        const route = useRoute();
-        let moments = route.query.moments;
-        /* const userId = route.params.userId;
-        console.log(userId); */
-
-        const user = reactive({
-            id: 1,
-            username: "Godzilla",
-            lastName: "Xue",
-            firstName: "Zilong",
-            followers: 150,
-            is_followed: false, 
-        });
-
-        const follow = () => {
-            if(user.is_followed) return;
-            user.is_followed = true;
-            user.followers++;
-        };
-
-        const unfollow = () => {
-            if(!user.is_followed) return;
-            user.is_followed = false;
-            user.followers--;
-        }
-         
         //获取所有动态
         const get_moments = () => {
             $.ajax({
@@ -92,9 +71,9 @@ export default {
             headers:{
                 Authorization: "Bearer " + jwt_token, 
             },
-            /* data: {
-                album_id: props.album_id,
-            }, */
+            data: {
+                friend_id: props.user_id,
+            },
             success(resp) {
                 console.log(resp);
                 moments.value = resp;
@@ -104,15 +83,36 @@ export default {
             }      
             });
         }
-        get_moments();
-           
+        //get_moments();
+        
+        //获取用户所有照片
+        const get_photolist = () => {
+            $.ajax({
+              url: "http://127.0.0.1:3000/user/photo/getList/",
+              type: "post",
+              headers:{
+                Authorization: "Bearer " + jwt_token, 
+              },
+              success(resp) {
+                console.log(resp);
+                photo_list.value = resp;
+                //methods.forceRerender();
+                //photo_name = ' ';
+              },
+              error(resp) {
+                console.log(resp);
+              }      
+            });
+          }
+        //get_photolist();
+        
         return {
-            user,
+            user_name,
+            account,
             moments,
             photo_list,
             get_moments,
-            follow,
-            unfollow,
+            get_photolist,
         }
     }
 }

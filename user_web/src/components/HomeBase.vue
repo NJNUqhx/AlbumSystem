@@ -7,15 +7,27 @@
             <div class="card-body">
                 <h2 class="card-title">欢迎使用电子相册系统</h2>
                 <p class="card-text">简介...</p>
-                <a href="#" class="btn btn-primary" >Click to start</a>
+                <a href="#" class="btn btn-primary" @click="visitPhoto()">Click to start</a>
             </div>
         </div>
     </div>
 </template>
   
   <script>
+  import router from '@/router/index';
+
       export default {
           name: "HomeBase",
+          setup(){
+            //访问用户相册
+            const visitPhoto = () =>{
+              //跳转到用户相册
+              router.push( 'myphoto');
+            }
+            return {
+              visitPhoto,
+            }
+          }
       }
   </script>
   

@@ -91,7 +91,7 @@ import { Modal } from 'bootstrap/dist/js/bootstrap'
 
 
 export default {
-    name: 'MomentView',
+    name: 'MyMomentView',
     components: {
     ContentBase,
     MomentItem

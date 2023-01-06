@@ -4,19 +4,21 @@
             <!-- 照片&姓名需要修改 -->
             <td><img class="user-img" src="https://cdn.acwing.com/media/user/profile/photo/220549_lg_6499ed3641.jfif" alt=""></td>
             <td>
-                <div class="user-name">John</div>
+                <div class="user-name">{{user_name}}</div>
                 <div class="createtime"> {{moment.time}}</div>
             </td>
         </tr></table>
       <!-- 点赞 -->
       <!-- <el-image v-for=" item in urllist" :key="item.url" :src="require('C://tmp//'+item.url+'.png')" style="width: 100px;height:100px;display: block;margin-bottom: 20px" /> -->
-        <div class="moment-text"></div>
-        <img class="moment-img" :src="require('D:/GitHub/AlbumSystem/images/' + moment.userId + '/' + photo1 + '.jpg')" alt="">
+        <div class="moment-text">{{moment.description}}</div>
+        <!-- <img class="moment-img" :src="require('D:/GitHub/AlbumSystem/images/' + moment.userId + '/' + photo1 + '.jpg')" alt=""> -->
+        <img class="moment-img" src="https://cdn.acwing.com/media/user/profile/photo/220549_lg_6499ed3641.jfif" alt="">
         <div class="row">
           <div class="col-10">
           </div>
           <div class="col-2">
               <table class="album-table"><tr>
+                  <td><img class="comment-img" src="~@/assets/report.png" alt="" data-bs-toggle="modal" :data-bs-target="('#report-Moment'+moment.momentId)"></td>
                   <td><img class="comment-img" src="~@/assets/1.png" alt="" @click="star()"></td>
                   <td>{{moment.star}}</td>
                   <!-- <td><img class="comment-img" src="~@/assets/2.png" alt=""></td>
@@ -83,7 +85,7 @@
       </div>
       <div class="modal-body">          
         <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label">评论</label>
+          <label for="exampleFormControlTextarea1" class="form-label">理由</label>
           <textarea v-model="new_content" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
       </div>
@@ -94,6 +96,29 @@
     </div>
   </div>
 </div>
+
+<!-- 举报动态 -->
+<div class="modal fade" :id="('report-Moment'+moment.momentId)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">举报动态</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">          
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">理由</label>
+          <textarea v-model="moment_reason" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary"  @click="moment_report(moment)">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </template>
  
  <script>
@@ -143,6 +168,7 @@
           let comments = ref([]);
           let new_content = ref('');
           let reason = ref('');
+          let moment_reason = ref('');
           //let photo = ref([]);
           console.log("photo_id:" + props.photo_id);
           
@@ -194,6 +220,29 @@
           }
           //获取评论
           get_comments();
+
+          let user_name = ref('');
+          const get_name = () => {
+              $.ajax({
+                url: "http://127.0.0.1:3000/user/moment/getMomentUserName/",
+                type: "post",
+                headers:{
+                  Authorization: "Bearer " + jwt_token, 
+                },
+                data: {
+                  moment_id: props.moment.momentId,
+                },
+                success(resp) {
+                  console.log(resp);
+                  user_name.value=resp;
+                },
+                error(resp) {
+                  console.log(resp);
+                  //console.log("id:" + props.album_id);
+                }
+              });
+            }
+          get_name();
           
           //发表评论
           const add_comment = () => {
@@ -269,16 +318,43 @@
               });
           }
 
+          //举报评论
+          const moment_report = (moment) => {
+            $.ajax({
+              url: "http://127.0.0.1:3000/user/moment/report/",
+              type: "post",
+              headers:{
+                Authorization: "Bearer " + jwt_token, 
+              },
+              data: {
+                moment_id: moment.momentId,
+                reason: moment_reason.value,
+              }, 
+              success(resp) {
+                console.log(resp);
+                moment_reason.value="";
+                Modal.getInstance('#report-Moment' + moment.momentId).hide();
+              },
+              error(resp) {
+                console.log(resp);
+              }      
+            });
+          }
+
           return {
             comments,
             new_content,
             reason,
             photo1,
+            moment_reason,
+            user_name,
+            get_name,
             star,
             comment_report,
             get_comments,
             add_comment,
             get_photo,
+            moment_report,
           }
         }
      }
