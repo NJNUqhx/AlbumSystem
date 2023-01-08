@@ -107,6 +107,67 @@ public class MomentGetListServiceImpl implements MomentGetListService {
     }
 
     @Override
+    public List<Moment> getAllList() {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+        int userId = user.getUserId();
+
+        //获取自己动态部分
+        QueryWrapper<Moment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",userId);
+        List<Moment> result = momentMapper.selectList(queryWrapper);
+
+        //获取自己的所有好友
+        List<User> allFriend = new ArrayList<>();
+        QueryWrapper<Friend> queryWrapper1 = new QueryWrapper<>();
+        QueryWrapper<Friend> queryWrapper2 = new QueryWrapper<>();
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        queryWrapper1.eq("user1_id",user.getUserId());
+        queryWrapper2.eq("user2_id",user.getUserId());
+
+        List<Friend> list1 = friendMapper.selectList(queryWrapper1);
+        for(Friend friend : list1){
+            queryWrapper.clear();
+            queryWrapper.eq("user_id",friend.getUser2Id());
+            allFriend.add(userMapper.selectOne(userQueryWrapper));
+        }
+        List<Friend> list2 = friendMapper.selectList(queryWrapper2);
+        for(Friend friend : list2){
+            queryWrapper.clear();
+            queryWrapper.eq("user_id",friend.getUser1Id());
+            allFriend.add(userMapper.selectOne(userQueryWrapper));
+        }
+
+        //获取好友动态部分
+        for(User friendUser:allFriend){
+            int friendId = friendUser.getUserId();
+            QueryWrapper<Moment> momentQueryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("user_id",friendId);
+            List<Moment> list = momentMapper.selectList(queryWrapper);
+
+            int userId1 = Math.min(userId,friendId), userId2 = Math.max(userId,friendId);
+            QueryWrapper<Friend> friendQueryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("user1_id",userId1).eq("user2_id",userId2);
+            boolean isFriend = friendMapper.exists(friendQueryWrapper);
+
+            List<Moment> ans = new ArrayList<>();
+            for(Moment moment:list) {
+                if (moment.getStatus() != 1) continue;//未审核或者审核不通过的的跳过
+                if (moment.getAuthority() == 0 || (moment.getAuthority() == 1 && isFriend)) {
+                    //开放或对好友开放且为好友
+                    ans.add(moment);
+                }
+            }
+
+            result.addAll(ans);
+        }
+
+        return result;
+    }
+
+    @Override
     public Photo getPhoto(Map<String, String> data) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();

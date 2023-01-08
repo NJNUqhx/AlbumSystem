@@ -21,6 +21,11 @@ public class MomentGetListController {
         return momentGetListService.getList();
     }
 
+    @PostMapping("/user/moment/getAllList/")//获取所有动态列表
+    public List<Moment> getAllList(){
+        return momentGetListService.getAllList();
+    }
+
     @PostMapping("/user/moment/getCommentList/")//获取动态的评论列表
     public List<Comment> getCommentList(@RequestParam Map<String, String> data){
         return momentGetListService.getCommentList(data);
