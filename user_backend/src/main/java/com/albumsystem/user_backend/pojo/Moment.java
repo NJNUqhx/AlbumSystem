@@ -22,4 +22,5 @@ public class Moment {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
     private Integer status;
+    private Integer photoId;
 }

@@ -73,7 +73,7 @@ public class MomentHandleServiceImpl implements MomentHandleService {
         int status = moment.getStatus();
 
         Moment new_moment = new Moment(
-                momentId,userId,authority,description,star,time,status
+                momentId,userId,authority,description,star,time,status, moment.getPhotoId()
         );
         momentMapper.updateById(new_moment);
         map.put("error_message","success");

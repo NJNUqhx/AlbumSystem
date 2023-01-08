@@ -45,7 +45,7 @@ public class MomentAddServiceImpl implements MomentAddService {
             return map;
         }
 
-        Moment moment = new Moment(null,userId,authority,description,star,now,status);
+        Moment moment = new Moment(null,userId,authority,description,star,now,status,photoId);
         momentMapper.insert(moment);
         int momentId = moment.getMomentId();
         PhotoToMoment photoToMoment = new PhotoToMoment(photoId,momentId);
