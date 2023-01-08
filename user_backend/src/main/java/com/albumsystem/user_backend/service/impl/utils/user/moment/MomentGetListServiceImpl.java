@@ -11,10 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.lang.management.MemoryManagerMXBean;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MomentGetListServiceImpl implements MomentGetListService {
@@ -129,23 +127,24 @@ public class MomentGetListServiceImpl implements MomentGetListService {
 
         List<Friend> list1 = friendMapper.selectList(queryWrapper1);
         for(Friend friend : list1){
-            queryWrapper.clear();
-            queryWrapper.eq("user_id",friend.getUser2Id());
+            userQueryWrapper.clear();
+            userQueryWrapper.eq("user_id",friend.getUser2Id());
             allFriend.add(userMapper.selectOne(userQueryWrapper));
         }
         List<Friend> list2 = friendMapper.selectList(queryWrapper2);
         for(Friend friend : list2){
-            queryWrapper.clear();
-            queryWrapper.eq("user_id",friend.getUser1Id());
+            userQueryWrapper.clear();
+            userQueryWrapper.eq("user_id",friend.getUser1Id());
             allFriend.add(userMapper.selectOne(userQueryWrapper));
         }
 
         //获取好友动态部分
+        //获取好友动态部分
         for(User friendUser:allFriend){
             int friendId = friendUser.getUserId();
             QueryWrapper<Moment> momentQueryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("user_id",friendId);
-            List<Moment> list = momentMapper.selectList(queryWrapper);
+            momentQueryWrapper.eq("user_id",friendId);
+            List<Moment> list = momentMapper.selectList(momentQueryWrapper);
 
             int userId1 = Math.min(userId,friendId), userId2 = Math.max(userId,friendId);
             QueryWrapper<Friend> friendQueryWrapper = new QueryWrapper<>();
@@ -163,7 +162,7 @@ public class MomentGetListServiceImpl implements MomentGetListService {
 
             result.addAll(ans);
         }
-
+        result = result.stream().sorted(Comparator.comparing(Moment::getTime).reversed()).collect(Collectors.toList());
         return result;
     }
 
